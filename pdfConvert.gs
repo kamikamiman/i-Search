@@ -3,11 +3,11 @@
 // クライアントシークレット:gZC5rnuPcHWPig7MyMyADPim
 
 // ------------------------------------------------------- //
-//          アップロードファイルをPDFに変換                     //
+//          アップロードファイルをPDFに変換                        //
 // ------------------------------------------------------- //
 function PdfConvert() {
   
-  const folder = DriveApp.getFolderById(mergeman);      // フォルダを取得
+  const folder = DriveApp.getFolderById(mergeman);   // フォルダを取得
     
   // ドキュメント ・ スプレットシート の場合
   if ( docs || sheets ) {
@@ -15,8 +15,7 @@ function PdfConvert() {
     
   // ドキュメント ・ スプレットシート 以外の場合
   } else {
-//    ConvertApi(fileId); // pdf変換
-    ConvertApi(id);       // pdf変換
+    ConvertApi(id); // pdf変換
   };
   
   
@@ -59,20 +58,28 @@ function PdfConvert() {
   // ------------------------------------------------------- //
   
   function GetConvertFileId (upFileBlob, upFileName, upFolder) {
-    let mimeType;
+    
+    let mimeType; // ファイルの種類
+    
+    // エクセルの場合
     if ( excel ) {
-      mimeType = MimeType.GOOGLE_SHEETS;
+      mimeType = MimeType.GOOGLE_SHEETS; // スプレットシートに変換
+    
+    // エクセル以外の場合
     } else {
-      mimeType = MimeType.GOOGLE_DOCS;
+      mimeType = MimeType.GOOGLE_DOCS;   // ドキュメントに変換
     };
-    //変換情報を作成する
+    
+    //変換情報
     const files = {
-      title: upFileName,
-      mimeType: mimeType,
-      parents: [{id: upFolder}],
+      title: upFileName,  // ファイル名
+      mimeType: mimeType, // ファイルの種類
+      parents: [{id: upFolder}], // ファイルの保存先
     };
+    
     const res = Drive.Files.insert(files, upFileBlob); //Drive APIで変換
     return res.id; //変換シートのIDを返す
+    
   };
 
 };

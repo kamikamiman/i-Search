@@ -122,14 +122,6 @@ let renameExt;  // アップロードファイル名
 let extension;  // 拡張子
 let fileName;   // アップロードファイル名
 
-let wordLeg;
-let word;
-let excel;
-let sheets;
-let docs;
-let text;
-let pdf;
-
 
 // ファイル内容の真偽（条件式で使用）
 const notImage = C !== "画像"; // 画像でないファイル 
@@ -137,8 +129,15 @@ const notVideo = C !== "動画"; // 動画でないファイル
 const uploadFileExists = B !== ""; // アップロードファイル有
 const image = C == "画像"; // 画像ファイル
 const video = C == "動画"; // 動画ファイル
-const memo  = AD !== "";   // 豆知識・プチ情報 有 
+const memo  = AD !== "";  // 豆知識・プチ情報 有 
 
+let wordLeg; // ワード
+let word;    // ワード
+let excel;   // エクセル
+let sheets;  // スプレットシート
+let docs;    // ドキュメント
+let text;    // テキスト
+let pdf;     // PDF
 
 // -------------------------------------------------- //
 //            アップロードされたファイル名を変更する            //
@@ -158,8 +157,8 @@ if ( uploadFileExists ) {
   if ( rename2.indexOf(".") !== -1 ) {
     extension  = rename2.split('.')[1];        // 拡張子を抽出
     personName = rename2.split('.')[0];        // 登録者名を抽出
-    renameExt  = `${rename}.${extension}`;     // アップロードファイル名(名前無 ・ 拡張子有) ??
-    renameExt2 = `${rename} - ${personName}`;  // アップロードファイル名(名前有 ・ 拡張子無) ??
+    renameExt  = `${rename}.${extension}`;     // アップロードファイル名(名前無 ・ 拡張子有)
+    renameExt2 = `${rename} - ${personName}`;  // アップロードファイル名(名前有 ・ 拡張子無)
   
   // 拡張子がない場合
   } else {
@@ -168,12 +167,12 @@ if ( uploadFileExists ) {
   };
   
   // アップデートファイル内容の真偽（条件式で使用）
-  wordLeg = uploadFile.getMimeType() == MimeType.MICROSOFT_WORD_LEGACY; // ワードファイル
-  word    = uploadFile.getMimeType() == MimeType.MICROSOFT_WORD;        // ワードファイル
+  wordLeg = uploadFile.getMimeType() == MimeType.MICROSOFT_WORD_LEGACY; // ワード
+  word    = uploadFile.getMimeType() == MimeType.MICROSOFT_WORD;        // ワード
   excel   = uploadFile.getMimeType() == MimeType.MICROSOFT_EXCEL;       // エクセル
   sheets  = uploadFile.getMimeType() == MimeType.GOOGLE_SHEETS;         // スプレットシート
   docs    = uploadFile.getMimeType() == MimeType.GOOGLE_DOCS;           // ドキュメント
-  text    = uploadFile.getMimeType() == MimeType.PLAIN_TEXT;            // テキストファイル
+  text    = uploadFile.getMimeType() == MimeType.PLAIN_TEXT;            // テキスト
   pdf     = uploadFile.getMimeType() == MimeType.PDF;                   // pdf
     
 };

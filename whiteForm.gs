@@ -29,8 +29,8 @@ function WhiteForm() {
   setDatas.forEach( setData => {
 
      if ( setData != "" ) {
-        if ( setData === AD ) i += 2;             // setDataが AD(豆知識タイトル)だった場合は改行
-        if ( setData === Z  ) i++;                // setDataが Z(豆知識・プチ情報)だった場合は改行
+        if ( setData === AD ) i += 2;  // setDataが AD(豆知識タイトル)だった場合は改行
+        if ( setData === Z  ) i++;     // setDataが Z(豆知識・プチ情報)だった場合は改行
      }
 
      keyForm.getRange(`B${i}`).setValue(setData); // setDataを書込む

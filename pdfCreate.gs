@@ -2,6 +2,7 @@
   // キーワードフォーム(スプレットシート)をPDF化して指定フォルダに保存 //
   // ------------------------------------------------------- //
   function PdfCreate() {
+    
     SpreadsheetApp.flush();
     const sheetId = keyForm.getSheetId(); // スプレットシートのIDを取得
     const url = 'https://docs.google.com/spreadsheets/d/1gwfUf30jWIMy-emXiJLN4ZwmXU2cXwtp4EUfD4slWxE/export?exportFormat=pdf&gid=SID'.replace('SID', sheetId);
@@ -29,7 +30,7 @@
     // 豆知識・プチ情報の場合のファイル名と保存先フォルダID
     } else {
       fileName = `${rename}_キーワード.pdf`; // キーワードフォームのファイル名を格納
-      folderId = mergeman;
+      folderId = mergeman; // ファイルの保存先フォルダID
     };
     
     const blob = response.getBlob().setName(fileName); // pdfの名前
