@@ -7,7 +7,7 @@ function WhiteForm() {
   let datas = getDatas;
 
   // キーワードフォームに記載不要なデータはここに記入
-  const notDatas = [ B, S ];
+  const notDatas = [ AM, S ];
   
   // キーワードフォームに書き込むデータ
   let setDatas = [];

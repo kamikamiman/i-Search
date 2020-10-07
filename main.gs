@@ -1,3 +1,9 @@
+/* 問題点
+
+
+
+*/
+
 // ------------------------------------------------------- //
 // スプレットシートを取得                                        //
 // ------------------------------------------------------- //
@@ -7,7 +13,7 @@ const UrlSS = getSS.getSheetByName('ファイルURL');                          
 const setSS = SpreadsheetApp.openById('1gwfUf30jWIMy-emXiJLN4ZwmXU2cXwtp4EUfD4slWxE'); // スプレットシート情報（書込み）
 let keyForm = setSS.getSheetByName('キーワードフォーム');                                   // スプレットシート（キーワードフォーム）情報
 
-const mergeman = '0B2IK-M_HFyeqfkpuOVpVdFA4aUgtU2EtTGtxNXJlWWJOajVlcG9PczIyM3BUZWhsbERiOFU'; //結合するPDFが入ってるフォルダID
+const mergeman = '0B2IK-M_HFyeqfk5RM01zYzhLLXJ6SnZNVEhNRTVQbHhDanZvampLOUZMUzVNUXF6SXlodk0'; //結合するPDFが入ってるフォルダID
 const formLastRow = form.getLastRow();   // スプレットシート（フォーム回答）の最終行目の情報を取得する。
 
 // ------------------------------------------------------- //
@@ -17,7 +23,7 @@ const formLastRow = form.getLastRow();   // スプレットシート（フォー
 const __A = form.getRange(formLastRow,  1).getValue();  
 const _A = new Date(__A);
 const A = Utilities.formatDate(_A, 'JST', 'yyyy/M/d');  // タイムスタンプ
-const B  = form.getRange(formLastRow,  2).getValue();   // ファイル選択
+//const B  = form.getRange(formLastRow,  2).getValue();   // ファイル選択
 const C  = form.getRange(formLastRow,  3).getValue();   // ファイル内容
 const D  = form.getRange(formLastRow,  4).getValue();   // 製函機の種類
 const E  = form.getRange(formLastRow,  5).getValue();   // 機械の種類
@@ -54,7 +60,7 @@ const AI = form.getRange(formLastRow, 35).getValue();   // フォルダーグル
 const AJ = form.getRange(formLastRow, 36).getValue();   // カウンターエジェクタの機種
 const AK = form.getRange(formLastRow, 37).getValue();   // スタッカーの機種（製函機）
 const AL = form.getRange(formLastRow, 38).getValue();   // 管理装置の機種（製函機）
-const AM = form.getRange(formLastRow, 39).getValue();   // 予備
+const AM = form.getRange(formLastRow, 39).getValue();   // ファイル選択
 const AN = form.getRange(formLastRow, 40).getValue();   // 予備
 const AO = form.getRange(formLastRow, 41).getValue();   // 予備
 const AP = form.getRange(formLastRow, 42).getValue();   // 予備
@@ -73,11 +79,11 @@ const AZ = form.getRange(formLastRow, 52).getValue();   // 予備
 if ( X === "" ) X = "-------"; 
 
 // googleフォームからの取得データを配列に格納。
-const getDatas = [ A, Y, W, X, B, C, D, E, F, G, H, I, J, K,
+const getDatas = [ A, Y, W, X, C, D, E, F, G, H, I, J, K,
                    L, M, N, O, P, Q, R, S, T, U, V, AA, AB,
                   AC, AE, AF, AG, AH, AI, AJ, AK, AD, AE, AF,
                   AG, AH, AI, AJ, AK, AL, Z ];
- 
+
 
 // アップロードファイル内容と保存先フォルダID
 const a = { contents:"取説・マニュアル（ISOWAオリジナル）", id:"1X2zHJweXS8n-rLvE8medP86GeordrxYB" };
@@ -126,7 +132,7 @@ let fileName;   // アップロードファイル名
 // ファイル内容の真偽（条件式で使用）
 const notImage = C !== "画像"; // 画像でないファイル 
 const notVideo = C !== "動画"; // 動画でないファイル
-const uploadFileExists = B !== ""; // アップロードファイル有
+const uploadFileExists = AM !== ""; // アップロードファイル有
 const image = C == "画像"; // 画像ファイル
 const video = C == "動画"; // 動画ファイル
 const memo  = AD !== "";  // 豆知識・プチ情報 有 
@@ -146,7 +152,7 @@ let pdf;     // PDF
 // アップロードファイルが存在する場合
 if ( uploadFileExists ) {
 
-  id = B.split('=')[1]                   // 取得したアップロードファイルのurlからID部分のみ抽出
+  id = AM.split('=')[1]                   // 取得したアップロードファイルのurlからID部分のみ抽出
   uploadFile = DriveApp.getFileById(id); // IDよりファイルを取得
   upLoadName = uploadFile.getName();     // アップロードされたファイル名を取得(名前有)  
   rename = upLoadName.split(' - ')[0];   // アップロードファイル名(名前無 ・ 拡張子無)

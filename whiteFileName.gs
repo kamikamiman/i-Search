@@ -14,7 +14,7 @@ function WhiteFileName() {
   
   
   // キーワードフォームに記載不要なデータはここに記入
-  const notDatas = [ A, B, C, W, Y, Z ];
+  const notDatas = [ A, AM, C, W, Y, Z ];
   
   // キーワードフォームに書き込むデータ
   let setDatas = [];
