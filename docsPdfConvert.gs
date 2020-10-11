@@ -4,7 +4,6 @@
 
 async function DocsPdfConvert () {
   
-  Logger.log("aaaaa");
   let datas = getDatas;       // フォームの取得データ配列getDatasを格納
   const notDatas = [ AM, S ];  // キーワードフォームに記載不要なデータはここに記入
   let setDatas = [];          // キーワードフォームに書き込むデータ
@@ -29,7 +28,7 @@ async function DocsPdfConvert () {
   /******************************************************/
 
   function WhiteDocs () {
-    Logger.log("bbbbb");
+
     const folder = DriveApp.getFolderById(mergeman); // フォルダを取得
     const fileList = folder.getFiles();              // フォルダ内のファイルを取得
   
