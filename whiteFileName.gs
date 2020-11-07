@@ -1,5 +1,5 @@
 // ------------------------------------------------------------ //
-//  スプレットシートの情報をファイル名に書込 （ 画像, 動画の場合のみ ）         //
+//  スプレットシートの情報をファイル名に書込 （ 画像, 動画の場合のみ ）   //
 // ------------------------------------------------------------ //
 
 function WhiteFileName() {
@@ -7,14 +7,14 @@ function WhiteFileName() {
   let datas = getDatas;
 
   // Xのデータが空だった場合
-  if ( X === "-------" ) {
+  if ( F === "-------" ) {
     const delNum = datas.indexOf("-------");
     datas.splice(delNum,1);
   };
   
   
   // キーワードフォームに記載不要なデータはここに記入
-  const notDatas = [ A, AM, C, W, Y, Z ];
+  const notDatas = [ A, B, C, D, G, J ];
   
   // キーワードフォームに書き込むデータ
   let setDatas = [];
@@ -31,7 +31,7 @@ function WhiteFileName() {
 
       // fileNameが空の場合
       if ( fileName == null ) {
-        fileName = C;              // fileName が空の場合
+        fileName = G;              // fileName が空の場合
       } else {
         fileName += `_${setData}`; // fileName が空でない場合 
       };
@@ -42,3 +42,4 @@ function WhiteFileName() {
   uploadFile.setName(fileName);
 
 };
+

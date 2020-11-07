@@ -5,7 +5,7 @@
 async function DocsPdfConvert () {
   
   let datas = getDatas;       // フォームの取得データ配列getDatasを格納
-  const notDatas = [ AM, S ];  // キーワードフォームに記載不要なデータはここに記入
+  const notDatas = [ B, AH ]; // キーワードフォームに記載不要なデータはここに記入
   let setDatas = [];          // キーワードフォームに書き込むデータ
   
   // [datas] と [notDatas] 内のデータを比較。
@@ -54,25 +54,25 @@ async function DocsPdfConvert () {
            // setData にデータが入っている場合
           if ( setData != "" ) {
         
-            if ( setData === AD ) '\n\n';  // setDataが AD(豆知識タイトル)だった場合は改行
-            if ( setData === Z  ) '\n';    // setDataが Z(豆知識・プチ情報)だった場合は改行
+            if ( setData === I ) '\n\n';  // setDataが AD(豆知識タイトル)だった場合は改行
+            if ( setData === J ) '\n';    // setDataが Z(豆知識・プチ情報)だった場合は改行
         
             if ( setData === A ) {
               body.appendParagraph('登録日時 ： {setData}');
               body.replaceText('{setData}', setData);
-            } else if ( setData === Y ) {
+            } else if ( setData === D ) {
               body.appendParagraph('登録者 ： {setData}');
               body.replaceText('{setData}', setData);
-            } else if ( setData === W ) {
+            } else if ( setData === C ) {
               body.appendParagraph('作成者 ： {setData}');
               body.replaceText('{setData}', setData);
-            } else if ( setData === X ) {
+            } else if ( setData === F ) {
               body.appendParagraph('キーワード ： {setData}');
               body.replaceText('{setData}', setData);
             } else {
               body.appendParagraph(setData);
             };
-          Logger.log(setData);
+//          Logger.log(setData);
          
           };
        

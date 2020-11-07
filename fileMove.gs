@@ -9,7 +9,7 @@ async function FileMove() {
   /* アップロードファイルの内容を取り出し、回答フォームの内容と比較。
      一致した内容のIDを [folderId] に格納する。 */
   contentsIds.forEach( el => {
-    if ( C === el.contents ) {
+    if ( G === el.contents ) {
       copyId = el.id;
     };
   });
@@ -27,7 +27,7 @@ async function FileMove() {
 
   const copyFolder = DriveApp.getFolderById(copyId);             // コピーファイルの保存先フォルダID
   const originalFile = DriveApp.getFilesByName(copyName).next(); // コピー元のオブジェクトを取得
-  const newFile = originalFile.makeCopy(copyName, copyFolder);   // 指定したフォルダにファイルをコピー
+  newFile = originalFile.makeCopy(copyName, copyFolder);         // 指定したフォルダにファイルをコピー
 
 
     const rootFolder = DriveApp.getRootFolder();                   // ルートフォルダ
