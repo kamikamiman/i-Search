@@ -2,7 +2,9 @@
 //  PDFを結合する                                           //
 // ------------------------------------------------------ //
 
-async function PdfMerge() {  
+async function PdfMerge() {
+  
+  console.log("PdfMerge 実行!");
     
   const folder     = DriveApp.getFolderById(mergeman); // フォルダを取得する
   const pdflist    = folder.getFiles();                // フォルダ内のPDFをリスト化
@@ -31,6 +33,8 @@ async function PdfMerge() {
 
 // ここからは完全コピー
 function mergePdfs(directory, name, pdf_list) {
+  
+  console.log("mergePdfs 実行!");
   
   if (name.slice(-4) != '.pdf') {
     

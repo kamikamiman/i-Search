@@ -4,6 +4,8 @@
 
 async function FileMove() {
 
+  console.log("FileMove 実行!");
+  
   let copyId; // コピーファイルのID
   
   /* アップロードファイルの内容を取り出し、回答フォームの内容と比較。
@@ -30,11 +32,13 @@ async function FileMove() {
   newFile = originalFile.makeCopy(copyName, copyFolder);         // 指定したフォルダにファイルをコピー
 
 
+  if ( !sheets && !docs ) {
     const rootFolder = DriveApp.getRootFolder();                   // ルートフォルダ
     if ( rootFolder.getFilesByName(renameExt).next() ) {
       const delFile = rootFolder.getFilesByName(renameExt).next();   // ルートフォルダーのrenameExtを含むファイル名を格納     
       delFile.setTrashed(true); // ルートフォルダのファイルをゴミ箱に入れる。
     };
+  };
 
 await FileTrash(); // アップロードフォルダ内の不要なファイルをゴミ箱に入れる。
 

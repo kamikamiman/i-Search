@@ -4,6 +4,8 @@
 
 function WhiteFileName() {
   
+  console.log("WhiteFileName 実行!");
+  
   let datas = getDatas;
 
   // Xのデータが空だった場合

@@ -1,6 +1,15 @@
-/* 問題点・改善点
+/* 問題点・改善点・確認事項
 
+◻︎確認事項
+　・問い合わせ・要望の回答があったらメールで通知。  >>> 完了
+　・上記の内容をスプレットシートにコピーして保存する。 >>> 完了
+  
 
+◻︎改善点
+　・ワードからpdf変換時に図形等を使用していると配置が変わってしまう。
+    ワードのバージョンアップで改善されるか確認
+　・pdf結合が1.5以上は不可。
+  
 */
 
 // ------------------------------------------------------- //
@@ -11,7 +20,7 @@ const form  = getSS.getSheetByName('フォームの回答');                    
 const setSS = SpreadsheetApp.openById('1zzq1OQxTZJOFo2eFaTGkNLyipGWDjl9i-LijcgIU3Hw'); // スプレットシート情報（書込み）
 let keyForm = setSS.getSheetByName('キーワードフォーム');                                 // スプレットシート（キーワードフォーム）情報
 
-const mergeman = '0BxQbdvn-LT2ufk1vemp3cmNKdjR3d1JSQXRndUNoWGNqbnpEamZJUTVkOEdvbHNQOEhNRGM'; //結合するPDFが入ってるフォルダID
+const mergeman = '0BxQbdvn-LT2ufmF2dkVoM0thc1JZcmMtWG05MnZtRmdoel96VTlDSXVOSHNSQnBhMDFxbGM'; //結合するPDFが入ってるフォルダID
 const formLastRow = form.getLastRow();   // スプレットシート（フォーム回答）の最終行目の情報を取得する。
 
 // ------------------------------------------------------- //
@@ -57,8 +66,8 @@ const AH = form.getRange(formLastRow, 34).getValue();   // 機器・部品の種
 const AI = form.getRange(formLastRow, 35).getValue();   // 機器・部品名（機械）
 const AJ = form.getRange(formLastRow, 36).getValue();   // 機器・部品名（電気）
 const AK = form.getRange(formLastRow, 37).getValue();   // 社内業務マニュアル
-const AL = form.getRange(formLastRow, 38).getValue();   // 予備
-const AM = form.getRange(formLastRow, 39).getValue();   // 予備
+const AL = form.getRange(formLastRow, 38).getValue();   // メールアドレス
+const AM = form.getRange(formLastRow, 39).getValue();   // 問合せ・要望
 const AN = form.getRange(formLastRow, 40).getValue();   // 予備
 const AO = form.getRange(formLastRow, 41).getValue();   // 予備
 const AP = form.getRange(formLastRow, 42).getValue();   // 予備
@@ -75,34 +84,43 @@ const AZ = form.getRange(formLastRow, 52).getValue();   // 予備
 
 
 
-if ( X === "" ) X = "-------"; 
+if ( F === "" ) F = "-------"; 
 
-// googleフォームからの取得データを配列に格納。
-const getDatas = [ A, C, D, E, F, G, H, I, J, K, L, M, N,
+// googleフォームからの取得データ
+const getDatas = [ A, C, D, F, E, G, H, I, J, K, L, M, N,
                    O, P, Q, R, S, T, U, V, W, X, Y, Z,
                   AA, AB, AC, AD, AE, AF, AG, AH, AI, AJ,
                   AK, AL, AM, AN, AO, AP, AQ, AR, AS, AT,
                   AU, AV, AW, AX, AY, AZ ];
 
+// キーワードフォームに記載不要なデータ
+const getNotDatas = [ B, AH, AL, AM ];
+
+// キーワードフォームに記載するデータのタイトル
+const AAA = "登録日時";
+const DDD = "登録者";
+const CCC = "作成者";
+const FFF = "キーワード";
+const dataTitle = [ AAA, DDD, CCC, FFF ];     // 補足説明文を配列に格納
 
 // アップロードファイル内容と保存先フォルダID
-const a = { contents:"取説・マニュアル（ISOWAオリジナル）", id:"1X2zHJweXS8n-rLvE8medP86GeordrxYB" };
-const b = { contents:"機器・部品マニュアル（メーカー）",    id:"10YmfTyhQjhwoydZojvcWuBoBH3B2ET7b" };
-const c = { contents:"手順書",                     id:"1yDxGP9qByBMKxyXJ5SuYqXZMwRnGsFR3" };
-const d = { contents:"調整要領書",                  id:"1_bbbPwpDckPiCULxuuaBDOJPS_m6rV7X" };
-const e = { contents:"トラブルシューティング",          id:"11z8g_6fx0_HctB38n3rXcJSqIye9Ned8" };
-const f = { contents:"仕様書",                     id:"1_aXRNswdLe6FBWn1hz4NGA0DBah_i9Fd" };
-const g = { contents:"報告書",                     id:"1YYEHNVZGgCrQodGSVlwAMjHfamT77ibt" };
-const h = { contents:"見解書",                     id:"1OYsfa463huf9_6ke6EuAUp_yyLz4D1aH" };
-const i = { contents:"点検・検査表",                 id:"1ngXN4An07NkWzMeI-qZp2NOp5NVYdnya" };
-const j = { contents:"設計変更",                   id:"14RvghAV4G8TP0juj-cRqefspohUvcWly" };
-const k = { contents:"アイレポ（修理・組立）",           id:"1qwm-LfZnhzdFqpwfjCWdEREYY_2YRVZZ" };
-const l = { contents:"豆知識・プチ情報",              id:"1BGfaGgm_JkEa-VvQW3iuOJO3cjDLrsil" };
-const m = { contents:"社内資料（業務マニュアル）",       id:"1iQU8jhGuMnS0jc7VHUQoPc6q8ol_wD7E" };
-const n = { contents:"社内資料（フォーム）",            id:"1YEllBfGu5k7rPaX8LGsr8L4i3Drx1Fpt" };
-const o = { contents:"その他",                     id:"1NjwPcpJfPqewkoWYMQUs3Cy9LbFt3cPC" };
-const p = { contents:"画像",                      id:"1WP77ffzOalWNoaGj7nPSv2aVkfsHLImG" };
-const q = { contents:"動画",                      id:"14HfgOm2nRKgnRzFFOv84QWSPMxqOqrc4" };
+const a = { contents:"取説・マニュアル（ISOWAオリジナル）", id:"1a3JnMp6ZfToZ4lthL4bGDdZOkT1IIpTR" };
+const b = { contents:"機器・部品マニュアル（メーカー）",    id:"1OxoFmxgU-hS07Klcqa7S7I12rpt1tlJa" };
+const c = { contents:"手順書",                     id:"1c7TqF0wHPrFCdfIpx7xfWdTE6-MTbvRW" };
+const d = { contents:"調整要領書",                  id:"1KkrkvTAx0oEtyaTZTYYYVzq35I055lz5" };
+const e = { contents:"トラブルシューティング",          id:"1KkrkvTAx0oEtyaTZTYYYVzq35I055lz5" };
+const f = { contents:"仕様書",                     id:"1far2FpiadbUZ_XHQD9BzwKlJVySGEKx9" };
+const g = { contents:"報告書",                     id:"1oXXtqrc96Ze4mykkfvI6K9bkzTvflNpE" };
+const h = { contents:"見解書",                     id:"16sky4P09sT2KdW1ngcPdeH5f0AjAaA-u" };
+const i = { contents:"点検・検査表",                 id:"1cL_4s38of31LA_xJKxLyplD_lu_5nIWl" };
+const j = { contents:"設計変更",                   id:"1DLPbnYjJQmkib4AmmfKdV2YNk9eHU42N" };
+const k = { contents:"アイレポ（修理・組立）",           id:"1-cSlKa2xEy1raZqf5ySf4lLOWQ4A8hm-" };
+const l = { contents:"豆知識・プチ情報",              id:"1W34glQWjt-spp7Hl5IN0TzczUnW8dyXF" };
+const m = { contents:"社内資料（業務マニュアル）",       id:"1tQsfk5n3MME2zJopDE2QShXN8v5jtYsK" };
+const n = { contents:"社内資料（フォーム）",            id:"1GQTozvYrRCdq7c24J8Nk3K8YpJ1HHi8h" };
+const o = { contents:"その他",                     id:"1RxdO0E4rNmEM1Yg9zwQrBh4PufuIDvRn" };
+const p = { contents:"画像",                      id:"1y5_S_pZxmPAFyY9P59uL9ggtNTJq5bud" };
+const q = { contents:"動画",                      id:"1NMIkUvyFwJUqHLQaIu4jWbb5AX5HeqIs" };
 const r = { contents:"", id:"" };
 const s = { contents:"", id:"" };
 const t = { contents:"", id:"" };
@@ -131,11 +149,11 @@ let newFile;    // アップロード完了後ファイル
 
 
 // ファイル内容の真偽（条件式で使用）
-const notImage = C !== "画像"; // 画像でないファイル 
-const notVideo = C !== "動画"; // 動画でないファイル
+const notImage = G !== "画像"; // 画像でないファイル 
+const notVideo = G !== "動画"; // 動画でないファイル
 const uploadFileExists = B !== ""; // アップロードファイル有
-const image = C == "画像"; // 画像ファイル
-const video = C == "動画"; // 動画ファイル
+const image = G == "画像"; // 画像ファイル
+const video = G == "動画"; // 動画ファイル
 const memo  = I !== "";  // 豆知識・プチ情報 有 
 
 let wordLeg; // ワード
@@ -174,13 +192,14 @@ if ( uploadFileExists ) {
   };
   
   // アップデートファイル内容の真偽（条件式で使用）
-  wordLeg = uploadFile.getMimeType() == MimeType.MICROSOFT_WORD_LEGACY; // ワード
-  word    = uploadFile.getMimeType() == MimeType.MICROSOFT_WORD;        // ワード
-  excel   = uploadFile.getMimeType() == MimeType.MICROSOFT_EXCEL;       // エクセル
-  sheets  = uploadFile.getMimeType() == MimeType.GOOGLE_SHEETS;         // スプレットシート
-  docs    = uploadFile.getMimeType() == MimeType.GOOGLE_DOCS;           // ドキュメント
-  text    = uploadFile.getMimeType() == MimeType.PLAIN_TEXT;            // テキスト
-  pdf     = uploadFile.getMimeType() == MimeType.PDF;                   // pdf
+  wordLeg  = uploadFile.getMimeType() == MimeType.MICROSOFT_WORD_LEGACY;  // ワード
+  word     = uploadFile.getMimeType() == MimeType.MICROSOFT_WORD;         // ワード
+  excelLeg = uploadFile.getMimeType() == MimeType.MICROSOFT_EXCEL_LEGACY; // エクセル
+  excel    = uploadFile.getMimeType() == MimeType.MICROSOFT_EXCEL;        // エクセル
+  sheets   = uploadFile.getMimeType() == MimeType.GOOGLE_SHEETS;          // スプレットシート
+  docs     = uploadFile.getMimeType() == MimeType.GOOGLE_DOCS;            // ドキュメント
+  text     = uploadFile.getMimeType() == MimeType.PLAIN_TEXT;             // テキスト
+  pdf      = uploadFile.getMimeType() == MimeType.PDF;                    // pdf
     
 };
 
@@ -216,7 +235,7 @@ function Main() {
       
       
       // エクセル ・ スプレットシート ・ pdf ・ 豆知識 の場合
-      if ( excel || sheets || pdf || memo ) {
+      if ( excel || excelLeg || sheets || pdf || memo ) {
         PdfCreate(); // キーワードフォームをPDFに変換
       }
       
@@ -228,7 +247,7 @@ function Main() {
       if ( uploadFileExists ) {
         
         // エクセル ・ スプレットシート ・ pdf の場合
-        if ( excel || sheets || pdf ) {
+        if ( excel || excelLeg || sheets || pdf ) {
           PdfMerge(); // pdf結合を実行 (アップロードファイル + キーワードフォーム)
           
         // エクセル ・ スプレットシート ・ pdf 以外の場合
@@ -239,10 +258,10 @@ function Main() {
       };
       
       SendMail(); // フォーム回答者にファイル保存完了メールを送信
-      
+
       
     } catch(e) {
-      Logger.log("エラーが発生しました！"); // エラー時の処理を記述
+      console.log("処理に失敗しました！"); // エラー時の処理を記述
     } finally {
       lock.releaseLock(); // ロックを開放
     };

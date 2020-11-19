@@ -3,6 +3,8 @@
 // ------------------------------------------------------- //
 function PdfCreate() {
   
+  console.log("PdfCreate 実行!");
+  
   SpreadsheetApp.flush();
   const sheetId = keyForm.getSheetId(); // スプレットシートのIDを取得
   const url = 'https://docs.google.com/spreadsheets/d/1zzq1OQxTZJOFo2eFaTGkNLyipGWDjl9i-LijcgIU3Hw/export?exportFormat=pdf&gid=SID'.replace('SID', sheetId);

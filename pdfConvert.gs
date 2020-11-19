@@ -1,11 +1,9 @@
-// picker APIキー：AIzaSyDaoSgZsxv3tGMUROxv-YnguKaHD4fT4aU
-// クライアントID:261800001194-bq23jnh2hv55bt189kr2994r0255jqda.apps.googleusercontent.com
-// クライアントシークレット:gZC5rnuPcHWPig7MyMyADPim
-
 // ------------------------------------------------------- //
 //          アップロードファイルをPDFに変換                        //
 // ------------------------------------------------------- //
 function PdfConvert() {
+  
+  console.log("PdfConvert 実行!");
   
   const folder = DriveApp.getFolderById(mergeman);   // フォルダを取得
     
@@ -21,10 +19,22 @@ function PdfConvert() {
   
   // ドキュメント ・ スプレットシート をpdf変換
   async function ConvertGFile() {
+    
+    console.log("ConvertGFile 実行!");
+    
+    if ( docs ) {
+      
+      DocsPdfConvert(); // ドキュメントにキーワードフォーム追加・pdf変換
+
+    } else {
+      
     const _pdfFile = uploadFile.getAs(MimeType.PDF); // コンバートファイルをpdf変換
     let pdfFile = folder.createFile(_pdfFile);       // pdfを作成
     const pdfFileName = `${renameExt}.pdf`;          // pdfファイル名
     await pdfFile.setName(pdfFileName);              // pdfファイル名を変更
+
+    }
+
   };
 
   
@@ -33,6 +43,8 @@ function PdfConvert() {
   // ------------------------------------------------------- //
   
   function ConvertApi(id) {
+    
+    console.log("ConvertApi 実行!");
 
     const upFileBlob = uploadFile.getBlob();    // ブロブを取得
     const upFileName = uploadFile.getName();    // ファイル名を取得
@@ -42,12 +54,15 @@ function PdfConvert() {
     
     // ワード ・ テキスト の場合
     if ( wordLeg || word || text ) {
+
       DocsPdfConvert(); // 変換したドキュメントファイルにキーワードフォーム追加 ・ pdf変換
     
     // ワード ・ テキスト 以外の場合
     } else {
+
       const _pdfFile = conFile.getAs(MimeType.PDF); // コンバートファイルをpdf変換
       let pdfFile = folder.createFile(_pdfFile);    // pdfファイルを作成
+
     };
     
   };
@@ -59,15 +74,20 @@ function PdfConvert() {
   
   function GetConvertFileId (upFileBlob, upFileName, upFolder) {
     
+    console.log("GetConvertFileId 実行!");
+    
     let mimeType; // ファイルの種類
     
     // エクセルの場合
-    if ( excel ) {
+    if ( excel || excelLeg ) {
+
       mimeType = MimeType.GOOGLE_SHEETS; // スプレットシートに変換
     
     // エクセル以外の場合
     } else {
+
       mimeType = MimeType.GOOGLE_DOCS;   // ドキュメントに変換
+
     };
     
     //変換情報

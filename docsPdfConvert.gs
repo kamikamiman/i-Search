@@ -4,17 +4,21 @@
 
 async function DocsPdfConvert () {
   
-  let datas = getDatas;       // フォームの取得データ配列getDatasを格納
-  const notDatas = [ B, AH ]; // キーワードフォームに記載不要なデータはここに記入
-  let setDatas = [];          // キーワードフォームに書き込むデータ
+  console.log("DocsPdfConvert 実行!");
   
-  // [datas] と [notDatas] 内のデータを比較。
-  // 重複していないデータを [setDatas] に追加する。
+  const datas = getDatas;         // フォームの取得データ配列getDatasを格納
+  const setSubDatas = dataTitle   // キーワードフォームに記載するデータのタイトル（A列）
+  const notDatas = getNotDatas;   // キーワードフォームに記載不要なデータ
+  let setDatas = [];              // キーワードフォームに書き込むデータ（B列）
+  
+ // [getDatas] と [notDatas] 内のデータを比較し、重複していないデータを [setDatas] に追加する。
   datas.concat(notDatas).forEach( data => {
     if ( datas.includes(data) && !notDatas.includes(data)) {
       setDatas.push(data);
     }
   });
+
+  console.log(setDatas);
 
   WhiteDocs();        // ドキュメントにキーワードを書き込む
   await DocsPdf();    // ドキュメントをpdf変換
@@ -24,13 +28,16 @@ async function DocsPdfConvert () {
 
 
   /******************************************************/
-  /***     Word >> 変換したドキュメントにキーワードを書込む      ***/
+  /***    Word >> 変換したドキュメントにキーワードを書込む   ***/
   /******************************************************/
 
   function WhiteDocs () {
+    
+    console.log("WriteDocs 実行!");
 
     const folder = DriveApp.getFolderById(mergeman); // フォルダを取得
     const fileList = folder.getFiles();              // フォルダ内のファイルを取得
+
   
     // フォルダ内にファイルが存在する場合
     while (fileList.hasNext()) {
@@ -50,32 +57,24 @@ async function DocsPdfConvert () {
       
         // 配列setDatas の中身を順番に取り出し、キーワードを書き込んでいく
         setDatas.forEach( setData => {
-                       
-           // setData にデータが入っている場合
+
+          // setData にデータが入っている場合        
           if ( setData != "" ) {
-        
             if ( setData === I ) '\n\n';  // setDataが AD(豆知識タイトル)だった場合は改行
             if ( setData === J ) '\n';    // setDataが Z(豆知識・プチ情報)だった場合は改行
-        
             if ( setData === A ) {
-              body.appendParagraph('登録日時 ： {setData}');
-              body.replaceText('{setData}', setData);
+              body.appendParagraph(`${setSubDatas[0]} ： ${setData}`);
             } else if ( setData === D ) {
-              body.appendParagraph('登録者 ： {setData}');
-              body.replaceText('{setData}', setData);
+              body.appendParagraph(`${setSubDatas[1]} ： ${setData}`);
             } else if ( setData === C ) {
-              body.appendParagraph('作成者 ： {setData}');
-              body.replaceText('{setData}', setData);
+              body.appendParagraph(`${setSubDatas[2]} ： ${setData}`);
             } else if ( setData === F ) {
-              body.appendParagraph('キーワード ： {setData}');
-              body.replaceText('{setData}', setData);
+              body.appendParagraph(`${setSubDatas[3]} ： ${setData}`);
             } else {
               body.appendParagraph(setData);
             };
-//          Logger.log(setData);
-         
           };
-       
+        
         });
     
       doc.saveAndClose(); // 強制的にファイルを更新
@@ -92,6 +91,8 @@ async function DocsPdfConvert () {
   /******************************************************/
 
   function DocsPdf () {
+    
+    console.log("DocsPdf 実行!");
   
     const folder = DriveApp.getFolderById(mergeman);  // フォルダを取得
     const fileList = folder.getFiles();               // フォルダ内のファイルを取得

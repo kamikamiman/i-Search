@@ -3,6 +3,8 @@
 // ------------------------------------------------------ //
 
 function FileTrash() {
+  
+  console.log("FileTrash 実行!");
 
   const delFolder = DriveApp.getFolderById(mergeman)  // 削除したいファイルのフォルダ
   const delfiles = delFolder.getFiles();              // 削除したいファイル

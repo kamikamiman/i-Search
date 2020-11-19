@@ -4,8 +4,13 @@
 
 function SendMail() {
   
+  console.log("SendMail 実行!");
+  
   // アドレスが見つからない場合の送信先
   const errAddress = 'k.kamikura@isowa.co.jp';
+  
+  // 問合せ・要望に回答があった場合の送信先
+  const contactAddress = 'k.kamikura@isowa.co.jp';
   
   // isowaビトのアドレスが記載されたスプレットシートを取得
   const ssId = SpreadsheetApp.openById('1r9Ok3NF0_lwNa2fzCcpttteEim_Kb79xOBLB8GsJjnA');
@@ -16,7 +21,7 @@ function SendMail() {
   // アドレスリストの配列の行と列を入替
   const _ = Underscore.load();               // アンダースコアを使用
   const arrTrans = _.zip.apply(_, arrData);  // 配列の行と列を入替
-  const resNum = arrTrans[1].indexOf(Y);     // 回答者名と一致した行番号(開始No:0)
+  const resNum = arrTrans[1].indexOf(D);     // 回答者名と一致した行番号(開始No:0)
 
   // メール送信用
   let reply;   // メール送信先
@@ -25,7 +30,7 @@ function SendMail() {
   const fileUrl = newFile.getUrl(); // アップロード完了後のファイルURL
 
   
-  // 回答者名(Y)とスプレットシートの名前が一致したアドレスを取得
+  // 登録者(D)にアップロード完了通知メールを送信
   if ( resNum !== -1 ) {
     
     reply   = arrTrans[2][resNum];
@@ -48,7 +53,7 @@ ${fileUrl}\n\
     
     MailContents( reply, title, content );
 
-  // 回答者名(Y)のアドレスが不明な場合
+  // 登録者のアドレスが不明な場合、errAddressにメール送信
   } else {
   
     reply   = errAddress;
@@ -73,8 +78,34 @@ iサーチにファイルをアップロードした${D}さんの\n\
   };
   
   
+  // 問合せ・要望(AM)に回答があった場合、メールを送信
+  if ( AM !== "" ) {
+    reply   = contactAddress;
+    title   = '【iサーチ】フォームから問い合わせ・要望がありました。';
+    content = '\
+iサーチ運営チームのみなさま\n\
+\n\
+いつもお仕事お疲れ様です。\n\
+iサーチにファイルをアップロードした${D}さんから\n\
+以下の問い合わせ・要望がありました。\n\
+\n\
+${AM}\n\
+よろしくお願いします。\n\
+'
+.replace('${AM}', AM)
+.replace('${D}', D)
+.replace('${fileUrl}', fileUrl)
+.replace('${addressUrl}', addressUrl);
+               
+    MailContents( reply, title, content );
+  
+  }
+  
+  
   
   function MailContents( reply, title, content ) {
+    
+    console.log("MailContents 実行!");
     
     const to = reply;      // 送信先
     const subject = title; // タイトル
