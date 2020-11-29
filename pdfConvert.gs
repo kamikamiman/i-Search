@@ -1,5 +1,5 @@
 // ------------------------------------------------------- //
-//          アップロードファイルをPDFに変換                        //
+//          アップロードファイルをPDFに変換                    //
 // ------------------------------------------------------- //
 function PdfConvert() {
   
@@ -39,7 +39,7 @@ function PdfConvert() {
 
   
   // ------------------------------------------------------- //
-  // エクセル ・ ワード ・ テキスト をpdf変換する (Drive API)           //
+  // エクセル ・ ワード ・ テキスト をpdf変換する (Drive API)      //
   // ------------------------------------------------------- //
   
   function ConvertApi(id) {
@@ -82,12 +82,13 @@ function PdfConvert() {
     if ( excel || excelLeg ) {
 
       mimeType = MimeType.GOOGLE_SHEETS; // スプレットシートに変換
+//      mimeType = MimeType.PDF;
     
     // エクセル以外の場合
     } else {
 
       mimeType = MimeType.GOOGLE_DOCS;   // ドキュメントに変換
-
+//      mimeType = MimeType.PDF
     };
     
     //変換情報

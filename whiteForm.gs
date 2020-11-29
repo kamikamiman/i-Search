@@ -49,19 +49,18 @@ function WhiteForm() {
   if ( AM !== "" ) {
   
     // スプレットシート情報
-    const ssForm = SpreadsheetApp.openById('1cYvFG40wGlJR51ikGvdfHE5YAAChWC5G1JtWoncjwqc');  // スプレットシート情報（書込み先）
+    const ssForm = SpreadsheetApp.openById('1gctMJ1s7HJ51XQojAJDITSD9cab9hSB8f4CHBlYo94g');  // スプレットシート情報（書込み先）
     const reqForm = ssForm.getSheetByName('問い合わせ・要望');                                  // スプレットシート（問い合わせ・要望）情報
     const lastRow = reqForm.getLastRow();                                                    // スプレットシートの最終行目を取得する。
   
     // スプレットシートに記入
     const reqA  = reqForm.getRange(lastRow+1,  1).setValue(A);   // タイムスタンプ
-    const reqB  = reqForm.getRange(lastRow+1,  2).setValue(D);   // 登録者
+    const reqB  = reqForm.getRange(lastRow+1,  2).setValue(AL);  // メールアドレス
     const reqC  = reqForm.getRange(lastRow+1,  3).setValue(AM);  // 問い合わせ・要望
   
-  }
+  };
 
 
 
 
 };
-

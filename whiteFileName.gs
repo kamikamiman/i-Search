@@ -16,7 +16,7 @@ function WhiteFileName() {
   
   
   // キーワードフォームに記載不要なデータはここに記入
-  const notDatas = [ A, B, C, D, G, J ];
+  const notDatas = [ A, B, C, D, E, G, AL, AM ];
   
   // キーワードフォームに書き込むデータ
   let setDatas = [];
@@ -44,4 +44,3 @@ function WhiteFileName() {
   uploadFile.setName(fileName);
 
 };
-

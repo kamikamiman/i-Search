@@ -1,19 +1,7 @@
-/* 問題点・改善点・確認事項
-
-◻︎確認事項
-　・問い合わせ・要望の回答があったらメールで通知。  >>> 完了
-　・上記の内容をスプレットシートにコピーして保存する。 >>> 完了
-  
-
-◻︎改善点
-　・ワードからpdf変換時に図形等を使用していると配置が変わってしまう。
-    ワードのバージョンアップで改善されるか確認
-　・pdf結合が1.5以上は不可。
-  
-*/
+// 失敗したらフォルダ内のファイルを削除する。
 
 // ------------------------------------------------------- //
-// スプレットシートを取得                                        //
+// スプレットシートを取得                                      //
 // ------------------------------------------------------- //
 const getSS = SpreadsheetApp.openById('18Z-7DdH6TTcsXPcoJ9m0X5XXFmZBTQHiwjhlaP9actQ'); // スプレットシート情報（読出し）
 const form  = getSS.getSheetByName('フォームの回答');                                    // スプレットシート（フォーム回答）情報
@@ -107,7 +95,7 @@ const dataTitle = [ AAA, DDD, CCC, FFF ];     // 補足説明文を配列に格�
 const a = { contents:"取説・マニュアル（ISOWAオリジナル）", id:"1a3JnMp6ZfToZ4lthL4bGDdZOkT1IIpTR" };
 const b = { contents:"機器・部品マニュアル（メーカー）",    id:"1OxoFmxgU-hS07Klcqa7S7I12rpt1tlJa" };
 const c = { contents:"手順書",                     id:"1c7TqF0wHPrFCdfIpx7xfWdTE6-MTbvRW" };
-const d = { contents:"調整要領書",                  id:"1KkrkvTAx0oEtyaTZTYYYVzq35I055lz5" };
+const d = { contents:"調整要領書",                  id:"1kJRlkkqtn3EFAlpdYJzCgRWLEtWBrcib" };
 const e = { contents:"トラブルシューティング",          id:"1KkrkvTAx0oEtyaTZTYYYVzq35I055lz5" };
 const f = { contents:"仕様書",                     id:"1far2FpiadbUZ_XHQD9BzwKlJVySGEKx9" };
 const g = { contents:"報告書",                     id:"1oXXtqrc96Ze4mykkfvI6K9bkzTvflNpE" };
@@ -261,9 +249,15 @@ function Main() {
 
       
     } catch(e) {
+      
       console.log("処理に失敗しました！"); // エラー時の処理を記述
+      FileTrash();                      // 結合前のファイルを削除
+      ErrMail();                        // エラー時のメール送信
+      
     } finally {
+      
       lock.releaseLock(); // ロックを開放
+      
     };
     
   };

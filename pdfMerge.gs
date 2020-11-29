@@ -24,6 +24,9 @@ async function PdfMerge() {
     
   };
   
+  mergearr.reverse(); // 配列の順番を反転 ( アップロードファイル, キーワードの順にする )
+  
+  
   const mergedFile = mergePdfs(folder, fileRename, mergearr);  //PDF結合実行
   
   await FileMove(); // 結合したpdfを指定フォルダに移動
@@ -31,7 +34,11 @@ async function PdfMerge() {
 };
 
 
-// ここからは完全コピー
+
+
+// ------------------------------------------------------- //
+// 関数 [ mergePdfs ]                                       //
+// ------------------------------------------------------- //
 function mergePdfs(directory, name, pdf_list) {
   
   console.log("mergePdfs 実行!");

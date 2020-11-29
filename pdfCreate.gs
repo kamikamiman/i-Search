@@ -30,14 +30,14 @@ function PdfCreate() {
   });
   
   // 豆知識・プチ情報の場合のファイル名と保存先フォルダID
-} else {
-  fileName = `${rename}_キーワード.pdf`; // キーワードフォームのファイル名を格納
-  folderId = mergeman; // ファイルの保存先フォルダID
-};
+  } else {
+    fileName = `${rename}_キーワード.pdf`; // キーワードフォームのファイル名を格納
+    folderId = mergeman; // ファイルの保存先フォルダID
+  };
 
-const blob = response.getBlob().setName(fileName); // pdfの名前
-const folder = DriveApp.getFolderById(folderId);   // pdfの保存先フォルダを指定
-const requestForm = folder.createFile(blob);       // フォルダ内にpdfを作成
+  const blob = response.getBlob().setName(fileName); // pdfの名前
+  const folder = DriveApp.getFolderById(folderId);   // pdfの保存先フォルダを指定
+  const requestForm = folder.createFile(blob);       // フォルダ内にpdfを作成
 
 };
   
