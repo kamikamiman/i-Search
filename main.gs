@@ -1,43 +1,5 @@
-
-// トリガー実行時
-function Running() {
-
-  let msg = ""; // エラー時のメッセージ
-  const lock = LockService.getDocumentLock(); // ドキュメントロックを使用
-
-  // 30秒間のロックを取得
-  try {
-    lock.waitLock(30000);       // ロックを実施
-    console.log("Main 実行！");  // 実行確認用
-    Main();                     // 関数を実行
-  } catch(e) {
-    console.log("e:" + e);
-    console.log("e.message:" + e.message);
-    // ロックが取得できなかった時の処理を記述
-    const checkword = "ロックのタイムアウト: 別のプロセスがロックを保持している時間が長すぎました。"
-    if ( e.message == checkword ) {
-      // ロックエラーの場合
-      msg = "他の人が実行中です。";
-      console.log(msg);
-    } else {
-      // ロックエラー以外の場合
-      msg = e.message;
-      console.log(msg);
-    }
-  } finally {
-    // ロックを開放
-    lock.releaseLock();
-    console.log("正常に実行されました！");
-  }
-
-};
-
-
 // デバック時はここから直接実行
 function Main() {
-
-  // let ggg = 0;
-  // for ( let gg = 0; gg < gg + 10; gg++ ) ggg = gg;
 
   // スプレットシートを取得
   const getSS = SpreadsheetApp.openById('11Y5gKhXQnXspVgih58s3_DDT5orEz-WAZ4sCwSXpAOs'); // スプレットシート情報（読出し）
@@ -622,6 +584,8 @@ function Main() {
 ・ 同時実行時の処理対策                                          >>> 完了
 ・ アップロードファイル名を変更(登録者名を削除)                      >>> 完了
 ・ メールを送信                                                 >>> 完了
+・ エラーとなった場合にエラー内容をメールで通知。                     >>> 完了
+
 
 メール通知ソフトについて
 ・ 追加ファイル数の内容が総計になっている。
