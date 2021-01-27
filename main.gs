@@ -453,6 +453,11 @@ function Main() {
       // オブジェクトに追加
       this.setUrl = setUrl;
 
+      // 問い合わせ・要望フォームのURL
+      const requestsUrl = "https://forms.gle/GkYxu4ENEmq2RzvX9";
+
+
+
       // メール送信用
       let reply;                             // メール送信先
       let title;                             // メールタイトル
@@ -472,10 +477,12 @@ function Main() {
     おかげ様でISOWAビトが安心して業務を行う事ができます。\n\
     \n\
     改善・不明点等ありましたら、お気軽に問い合わせフォーム\n\
-    よりご連絡下さい。'
+    よりご連絡下さい。\n\
+    ${requestsUrl}'
     .replace('${registPerson}', registPerson)
-    .replace('${setUrl}', setUrl);
-    
+    .replace('${setUrl}', setUrl)
+    .replace('${requestsUrl}', requestsUrl);
+      
         // メールを送信
         MailContents( reply, title, content );
 
