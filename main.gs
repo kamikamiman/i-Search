@@ -1,3 +1,16 @@
+/*
+　・ 登録者名にスペースがあった場合は、スペースを削除して格納する。
+　　 スプレットの情報と完全一致した場合のみアドレスを取得する為。
+　　　>>> 完了
+
+　・ アップロードファイルを複数登録する場合に対応する。
+
+　・ アップロードされない時がある。正常にアップロードできなかった後に
+　　 何か影響があるのか要確認。→ scriptの実行する順番を確実に守るようにする。
+     >>> ファイル名が一致していない可能性が高い。
+
+*/
+
 // デバック時はここから直接実行
 function Main() {
 
@@ -22,7 +35,7 @@ function Main() {
   const _A  = new Date(__A);
   const A  = Utilities.formatDate(_A, 'JST', 'yyyy/M/d');  // タイムスタンプ
   const B  = getAnswers[1];     // ファイル選択           >>> メールアドレス 
-  const C  = getAnswers[2];     // 作成者（フルネーム）    >>> 登録者(フルネーム)
+  const C  = getAnswers[2].replace(/　/g,"");  // 作成者（フルネーム）    >>> 登録者(フルネーム)
   const D  = getAnswers[3];     // 登録者（フルネーム）    >>> 作成者(フルネーム)
   const E  = getAnswers[4];     // お客様名              >>> ファイル内容
   const F  = getAnswers[5];     // 関連付けしたいキーワード >>> 豆知識・プチ情報(アップロードファイルの有無)
@@ -121,23 +134,23 @@ function Main() {
   const dataTitle = [ AAA, DDD, CCC, KEY ];     // 説明文を配列に格納
 
   // アップロードファイル内容と保存先フォルダID
-  const a = { contents:"取説・マニュアル（ISOWAオリジナル）", id:"1a3JnMp6ZfToZ4lthL4bGDdZOkT1IIpTR" };
-  const b = { contents:"機器・部品マニュアル（メーカー）",    id:"1OxoFmxgU-hS07Klcqa7S7I12rpt1tlJa" };
-  const c = { contents:"手順書",                     id:"1c7TqF0wHPrFCdfIpx7xfWdTE6-MTbvRW" };
-  const d = { contents:"調整要領書",                  id:"1kJRlkkqtn3EFAlpdYJzCgRWLEtWBrcib" };
-  const e = { contents:"トラブルシューティング",          id:"1KkrkvTAx0oEtyaTZTYYYVzq35I055lz5" };
-  const f = { contents:"仕様書",                     id:"1far2FpiadbUZ_XHQD9BzwKlJVySGEKx9" };
-  const g = { contents:"報告書",                     id:"1oXXtqrc96Ze4mykkfvI6K9bkzTvflNpE" };
-  const h = { contents:"見解書",                     id:"16sky4P09sT2KdW1ngcPdeH5f0AjAaA-u" };
-  const i = { contents:"点検・検査表",                 id:"1cL_4s38of31LA_xJKxLyplD_lu_5nIWl" };
-  const j = { contents:"設計変更",                   id:"1DLPbnYjJQmkib4AmmfKdV2YNk9eHU42N" };
-  const k = { contents:"アイレポ（修理・組立）",           id:"1-cSlKa2xEy1raZqf5ySf4lLOWQ4A8hm-" };
-  const l = { contents:"豆知識・プチ情報",              id:"1W34glQWjt-spp7Hl5IN0TzczUnW8dyXF" };
-  const m = { contents:"社内資料（業務マニュアル）",       id:"1tQsfk5n3MME2zJopDE2QShXN8v5jtYsK" };
-  const n = { contents:"社内資料（フォーム）",            id:"1GQTozvYrRCdq7c24J8Nk3K8YpJ1HHi8h" };
-  const o = { contents:"その他",                     id:"1RxdO0E4rNmEM1Yg9zwQrBh4PufuIDvRn" };
-  const p = { contents:"画像",                      id:"1y5_S_pZxmPAFyY9P59uL9ggtNTJq5bud" };
-  const q = { contents:"動画",                      id:"1NMIkUvyFwJUqHLQaIu4jWbb5AX5HeqIs" };
+  const a = { contents:"取説・マニュアル（ISOWAオリジナル）",      id:"1a3JnMp6ZfToZ4lthL4bGDdZOkT1IIpTR" };
+  const b = { contents:"機器・部品マニュアル（メーカー）",         id:"1OxoFmxgU-hS07Klcqa7S7I12rpt1tlJa" };
+  const c = { contents:"手順書",                               id:"1c7TqF0wHPrFCdfIpx7xfWdTE6-MTbvRW" };
+  const d = { contents:"調整要領書",                            id:"1kJRlkkqtn3EFAlpdYJzCgRWLEtWBrcib" };
+  const e = { contents:"トラブルシューティング・定数表・パラメータ", id:"1KkrkvTAx0oEtyaTZTYYYVzq35I055lz5" };
+  const f = { contents:"仕様書",                               id:"1far2FpiadbUZ_XHQD9BzwKlJVySGEKx9" };
+  const g = { contents:"報告書",                               id:"1oXXtqrc96Ze4mykkfvI6K9bkzTvflNpE" };
+  const h = { contents:"見解書",                               id:"16sky4P09sT2KdW1ngcPdeH5f0AjAaA-u" };
+  const i = { contents:"点検・検査表",                          id:"1cL_4s38of31LA_xJKxLyplD_lu_5nIWl" };
+  const j = { contents:"設計変更",                             id:"1DLPbnYjJQmkib4AmmfKdV2YNk9eHU42N" };
+  const k = { contents:"アイレポ（修理・組立）",                 id:"1-cSlKa2xEy1raZqf5ySf4lLOWQ4A8hm-" };
+  const l = { contents:"豆知識・プチ情報",                      id:"1W34glQWjt-spp7Hl5IN0TzczUnW8dyXF" };
+  const m = { contents:"社内資料（業務マニュアル）",              id:"1tQsfk5n3MME2zJopDE2QShXN8v5jtYsK" };
+  const n = { contents:"社内資料（フォーム）",                   id:"1GQTozvYrRCdq7c24J8Nk3K8YpJ1HHi8h" };
+  const o = { contents:"その他",                               id:"1RxdO0E4rNmEM1Yg9zwQrBh4PufuIDvRn" };
+  const p = { contents:"画像",                                id:"1y5_S_pZxmPAFyY9P59uL9ggtNTJq5bud" };
+  const q = { contents:"動画",                                id:"1NMIkUvyFwJUqHLQaIu4jWbb5AX5HeqIs" };
   const r = { contents:"", id:"" };
   const s = { contents:"", id:"" };
   const t = { contents:"", id:"" };
@@ -156,54 +169,55 @@ function Main() {
   const uploadFileExists = uploadFileUrl !== "";
 
 
-
-
-
   // それぞれ処理を実行
   class Obj {
 
     constructor() {};
 
 
-    // ========== [ メソッド ] アップロードファイル・キーワードフォーム名を変更 ========== //
+    // ========== [ メソッド ] アップロードファイル・キーワードファイル名を変更 ========== //
 
-    GetFileName() {
+    GetFileData() {
 
-      console.log("GetFileName 実行!");
+      console.log("GetFileData 実行!");
 
-      // 変数の定義
-      let id;             // アップロードID
-      let uploadFile;     // アップロードファイル
-      let upLoadName;     // アップロードされたファイル名を取得(名前有)
-      let upLoadName0;    // アップロードされたファイル名の分割(前半)
-      let upLoadName1;    // アップロードされたファイル名の分割(後半)
-      let fileRename;     // 名前が付けられる前の元々のファイル名
-      let keywordName;    // キーワードフォームの名前
+      // 変数の定義・初期化
+      let id;                  // アップロードID
+      let uploadFile;          // アップロードファイル
+      let upLoadName;          // アップロードされたファイル名を取得(名前有)
+      let upLoadNames = [];    // 配列 アップロードされたファイル名
+      let upLoadUrls  = [];    // 配列 アップロードされたファイルURL
 
-      // アップロードファイルが存在する場合
+      console.log("uploadFileExists(アップロードファイルの存在判定):" + uploadFileExists);  // ログ確認用
+
+      // アップロードファイルが存在する場合に実行
       if ( uploadFileExists ) {
-        id = uploadFileUrl.split('=')[1]               // 取得したアップロードファイルのurlからID部分のみ抽出
-        uploadFile = DriveApp.getFileById(id);         // IDよりファイルを取得
-        upLoadName = uploadFile.getName();             // アップロードされたファイル名を取得(名前有)
-        upLoadName0 = upLoadName.split(' - ')[0];      // アップロードファイル名(名前無 ・ 拡張子無)
-        upLoadName1 = upLoadName.split(' - ')[1];      // アップロード時に付いた名前以降の文字列を抽出
-        keywordName = `${upLoadName0}_キーワード.pdf`;   // キーワードフォームの名前
-        // 拡張子がある場合
-        if ( upLoadName.indexOf(".") !== -1 ) {
-          const extension  = upLoadName1.split('.')[1];      // 拡張子を抽出
-          fileRename = `${upLoadName0}.${extension}`;  // アップロードファイル名(名前無 ・ 拡張子有)
-        // 拡張子がない場合
+        const multiple = uploadFileUrl.indexOf(", ") !== -1; // アップロードファイルが複数あるか判定
+
+        // アップロードファイルのURLを配列で取得
+        if ( multiple ) {
+          upLoadUrls = uploadFileUrl.split(', ');            // 複数ファイルの場合
         } else {
-          fileRename = upLoadName0;                    // アップロードファイル名        
+          upLoadUrls = [ uploadFileUrl ];                    // 1ファイルのみの場合
         }
+
+        // アップロードファイル名を取得、配列に追加
+        upLoadUrls.forEach( el => {
+          id = el.split('=')[1]                     // 取得したアップロードファイルのurlからID部分のみ抽出
+          uploadFile = DriveApp.getFileById(id);    // IDよりファイルを取得
+          upLoadName = uploadFile.getName();        // アップロードされたファイル名を取得(名前有)
+          upLoadNames.push(upLoadName);             // アップロードされたファイル名(名前有)を配列に追加
+        })
       }
 
-      // オブジェクトに追加
-      this.upLoadName = upLoadName;
-      this.keywordName = keywordName;
-      this.fileRename = fileRename;
+      console.log("upLoadNames:" + upLoadNames);
+      console.log("upLoadUrls:" + upLoadUrls);
 
-    };  // GetFileName()_END
+      // オブジェクトに追加
+      this.upLoadUrls  = upLoadUrls;    // アップロードファイルURL(生データ)
+      this.upLoadNames = upLoadNames;   // アップロードファイル名(生データ)
+
+    };  // GetFileData()_END
 
 
 
@@ -213,45 +227,98 @@ function Main() {
 
       console.log("FileMove 実行!");
     
-      let copyId;            // コピーファイルのID
-      let fileName;          // コピー元のファイル名
-      let fileUrl;           // コピーファイルURL
+      // 変数の定義・初期化
+      let copyId;               // コピーファイルのID
+      let fileName;             // コピー元のファイル名
+      let fileName0, fileName1; // コピー元のファイル名(分割)
+      let fileUrl;              // コピーファイルURL
+      let fileRename;           // 名前が付けられる前の元々のファイル名
+      let keywordName;          // キーワードファイルのファイル名
+      let fileNames    = [];    // 配列 [コピー元のファイル名]
+      let fileUrls     = [];    // 配列 [コピーファイルURL]
+      let fileRenames  = [];    // 名前が付けられる前の元々のファイル名の配列
+      let keywordNames = [];    // 配列 [キーワードファイルのファイル名]
+
+      let folder = DriveApp.getFolderById(upfolder);         // コピー元ファイルのフォルダ
+      let files  = folder.getFiles();                        // コピー元ファイル;
     
-      /* アップロードファイルの内容を取り出し、回答フォームの内容と比較。
-        一致した内容のIDを [copyId] に格納する。 */
+      // 登録先フォルダ名と回答フォームの内容が一致したフォルダIDを[copyId]に格納する。
       contentsIds.forEach( el => {
         if ( fileContents === el.contents ) copyId = el.id;
       })
-  
-      console.log(copyId);
 
-      const folder = DriveApp.getFolderById(upfolder)  // コピーしたいファイルのフォルダ
-      const files  = folder.getFiles();                // コピーしたいファイル
-    
-      // アップロード関連のファイルがあればコピーして指定フォルダに保存(URLを取得)
-      while(files.hasNext()) {
-        const file = files.next();    // ファイルを取得
-        fileName = file.getName();    // ファイル名を取得
 
-        const nameJudge = fileName.indexOf(this.upLoadName) !== -1;   // ファイル名の有無判定
-        
-        // 判定がtrueなら実行
-        if ( nameJudge ) {
-          const copyFolder = DriveApp.getFolderById(copyId);                   // コピーファイルの保存先フォルダID
-          const originalFile = DriveApp.getFilesByName(fileName).next();       // コピー元のオブジェクトを取得
-          const newFile = originalFile.makeCopy(this.fileRename, copyFolder);  // 指定したフォルダにファイルをコピー
-          fileUrl = newFile.getUrl();                                          // ファイルのURLを取得
-
-          // オブジェクトに追加
-          this.newFile = newFile;
-          this.fileUrl = fileUrl;
-          
-          // ログ確認用
-          console.log("nameJudge1:" + nameJudge);
-          console.log("nameJudge2:" + nameJudge);
-          console.log("URL:" + fileUrl);
+      for ( let i = 0; i < 50; i++ ) {
+        if ( !files.hasNext() ) {
+          console.log("フォルダ内にファイルが存在しませんでした！");
+          SleepTimer();
         }
       }
+
+
+      // 指定フォルダ内にファイルが存在しない場合は、5秒間スリープ   *** 対策ソフト_20210219 ***
+      function SleepTimer() {
+        let now = Utilities.formatDate(new Date(), "Asia/Tokyo", "HH:mm:ss");   // 現在の時間
+        console.log("now(現在時間):" + now);
+
+        folder = DriveApp.getFolderById(upfolder);                // コピー元ファイルのフォルダ
+        files  = folder.getFiles();                               // コピー元ファイル
+        let staySecond = 5;                                     // 遅延時間の設定(秒)
+        Utilities.sleep(staySecond * 1000);                     // 遅延実行
+      };
+
+      // アップロード関連のファイルが存在した場合、コピーして指定フォルダに保存(URLを取得)
+      while(files.hasNext()) {
+        let file  = files.next();                             // ファイルを取得
+        fileName  = file.getName();                           // ファイル名を取得
+        fileName0 = fileName.split(' - ')[0];                 // アップロードファイル名(名前無 ・ 拡張子無)
+        fileName1 = fileName.split(' - ')[1];                 // アップロードファイルの登録者名以降の文字列を抽出
+
+        // 登録者名を削除したファイル名を取得
+        if ( fileName.indexOf(".") !== -1 ) {
+          const extension  = fileName1.split('.')[1];         // 拡張子を抽出
+          fileRename = `${fileName0}.${extension}`;           // ファイルに拡張子がある場合
+        } else {
+          fileRename = fileName0;                             // ファイルに拡張子がない場合
+        }
+
+        keywordName = `${fileName0}_キーワード.pdf`;            // キーワードファイル名
+        const fileNum = this.upLoadNames.indexOf(fileName);   // ファイル名と一致した配列番号
+        const nameJudge = ( fileNum !== -1 );                 // ファイル名の有無判定
+
+        // ログ確認用
+        console.log("fileName(ファイル名 名前有・拡張子含):" + fileName);
+        console.log("fileName0(ファイル名 名前無・拡張子無):" + fileName0);
+        console.log("fileName1(ファイル名 名前のみ・拡張子含):" + fileName1);
+        console.log("fileRename(登録者名を削除したファイル名):" + fileRename);
+        console.log("keywordName(キーワードファイル名):" + keywordName);
+        console.log("fileNum(アップロードファイルの格納された配列と取得したファイル名が一致した配列番号):" + fileNum);
+        console.log("upLoadNames(アップロードファイル名):" + this.upLoadNames);
+        console.log("nameJudge(ファイル名一致判定):" + nameJudge);
+          
+        // ファイル名が一致したら実行
+        if ( nameJudge ) {
+          console.log("ファイル名が一致しました！");
+          const copyFolder = DriveApp.getFolderById(copyId);                   // コピーファイルの保存先フォルダID
+          const originalFile = DriveApp.getFilesByName(fileName).next();       // コピー元のオブジェクトを取得
+          const newFile = originalFile.makeCopy(fileRename, copyFolder);       // 指定したフォルダにファイルをコピー
+          fileUrl = newFile.getUrl();                                          // ファイルのURLを取得
+
+          // 配列に追加
+          fileNames.push(fileName);                                            // ファイル名(元データ)を配列に追加
+          fileRenames.push(fileRename);                                        // ファイル名(コピーデータ)を配列に追加
+          fileUrls.push(fileUrl);                                              // ファイルURL(コピーデータ)を配列に追加
+          keywordNames.push(keywordName);                                      // キーワードファイル名を配列に追加
+        }
+      }
+
+      // console.log("fileUrls:" + fileUrls);
+
+     // オブジェクトに追加　
+     this.fileNames   = fileNames;        // ファイル名(元データ)
+     this.fileRenames = fileRenames;      // ファイル名(コピーデータ)
+     this.fileUrls    = fileUrls;         // ファイルURL(コピーデータ)
+     this.keywordNames = keywordNames;    // キーワードファイル名
 
     };    // FileMove()_END
 
@@ -259,38 +326,36 @@ function Main() {
 
 
 
-    // ========== [ メソッド ] フォーム回答をキーワードフォーム(スプレットシート)に書込 ========== //
+    // ========== [ メソッド ] フォーム回答をキーワードファイル(スプレットシート)に書込 ========== //
      
     WhiteForm() {
 
       console.log("WhiteForm 実行!");
   
-      const datas = getDatas;         // フォームの取得データ配列getDatasを格納
-      const setSubDatas = dataTitle   // キーワードフォームに記載するデータのタイトル（A列）
-      const notDatas = getNotDatas;   // キーワードフォームに記載不要なデータ
-      let setDatas = [];              // キーワードフォームに書き込むデータ（B列）
+      // 変数の定義・初期化
+      const datas       = getDatas;      // フォームの取得データ配列getDatasを格納
+      const setSubDatas = dataTitle;     // キーワードファイルに記載するデータのタイトル（A列）
+      const notDatas    = getNotDatas;   // キーワードファイルに記載不要なデータ
+      let   setDatas    = [];            // キーワードファイルに書き込むデータ（B列）
 
-  
-      // [getDatas] と [notDatas] 内のデータを比較し、重複していないデータを [setDatas] に追加する。
+      // [getDatas] と [notDatas] 内のデータを比較し、重複していないデータを [setDatas] に追加
       datas.concat(notDatas).forEach( data => {
         if ( datas.includes(data) && !notDatas.includes(data)) setDatas.push(data);
       });
 
-
       // キーワード説明文を書込 (スプレットシートのA列)
       let num = 1; // 書込み行(初期設定)
 
-      // 配列[setSubDatas]に入っている説明文を書き込んでいく
+      // 配列[setSubDatas]に入っている説明文を書込
       setSubDatas.forEach( setSubData => {
         keyForm.getRange(`A${num}`).setValue(setSubData); // setSubDataを書込む 
         num++;                                            // 改行
       });
 
-
       // キーワードを書込 (スプレットシートのB列)  
       num = 1; // 書込み行(初期設定)
 
-      // 配列[setDatas]に入っているキーワードを書き込んでいく
+      // 配列[setDatas]に入っているキーワードを書込
       setDatas.forEach( setData => {
         if ( setData != "" ) {
           if ( setData === littleInfoTitle ) num += 2;  // setDataが 豆知識タイトルだった場合は改行
@@ -301,14 +366,22 @@ function Main() {
         if ( setData !== "" ) num++;                    // setDataの中身が空でない場合は改行
       });
 
-      // アップロードファイルのURLを書込
-      if ( uploadFileUrl !== "" ) keyForm.getRange(`B${num}`).setValue(this.fileUrl);
-
+      // ファイル名・URLを書込
+      if ( uploadFileUrl !== "" ) {
+        let i = 0;
+        this.fileUrls.forEach( fileUrl => {
+          keyForm.getRange(`B${num}`).setValue(this.fileRenames[i]);
+          num++;          
+          keyForm.getRange(`B${num}`).setValue(fileUrl);
+          num++;
+          i++;
+        })
+      }
 
       // 問い合わせ・要望の項目に回答があったら、問い合わせ・要望のスプレットシートに内容を書込
       if ( requests !== "" ) {
+
         console.log("問い合わせ・要望あり！");
-        console.log(timeStamp, mailAddress, requests);
 
         // スプレットシート情報
         const ssForm = SpreadsheetApp.openById('1gctMJ1s7HJ51XQojAJDITSD9cab9hSB8f4CHBlYo94g');  // スプレットシート情報（書込み先）
@@ -319,6 +392,13 @@ function Main() {
         const reqA  = reqForm.getRange(lastRow+1,  1).setValue(timeStamp);    // タイムスタンプ
         const reqB  = reqForm.getRange(lastRow+1,  2).setValue(mailAddress);  // メールアドレス
         const reqC  = reqForm.getRange(lastRow+1,  3).setValue(requests);     // 問い合わせ・要望 
+
+        // オブジェクトに追加
+        this.timeStamp   = timeStamp;    // 日時
+        this.mailAddress = mailAddress;  // メールアドレス
+        this.requests    = requests;     // 問い合わせ内容
+      } else {
+        console.log("問い合わせ・要望なし！");
       }
 
     };  // WhiteForm()_END
@@ -356,8 +436,7 @@ function Main() {
       if ( notUploadFile === 'なし' ) {
         fileName = `${littleInfoTitle}.pdf`; // ファイル名を指定
     
-        /* アップロードファイルの内容を取り出し、回答フォームの内容と比較。
-        一致した内容のIDを [folderId] に格納する。 */
+        // 保存先フォルダと回答フォームの内容が一致した内容のフォルダIDを [folderId] に格納
         contentsIds.forEach( el => {
           if ( fileContents === el.contents ) folderId = el.id;
         });
@@ -365,20 +444,23 @@ function Main() {
         // pdfを指定フォルダに作成
         blob = response.getBlob().setName(fileName); // pdfの名前
         folder = DriveApp.getFolderById(folderId);   // pdfの保存先フォルダを指定
-        // @ts-ignore
         requestForm = folder.createFile(blob);       // フォルダ内にpdfを作成
 
       // ファイル内容が豆知識・プチ情報以外の場合
       } else {
-        // キーワードフォームを指定フォルダに作成
-        folderId = folderIdKey;                              // ファイルの保存先フォルダID
-        blob = response.getBlob().setName(this.keywordName); // pdfの名前
-        folder = DriveApp.getFolderById(folderId);           // pdfの保存先フォルダを指定
-        requestForm = folder.createFile(blob);               // フォルダ内にpdfを作成
+
+        // キーワードファイルを指定フォルダに作成
+        folderId = folderIdKey;                                  // ファイルの保存先フォルダID
+        
+        // キーワードファイルを作成
+        this.keywordNames.forEach( keywordName => {
+        blob = response.getBlob().setName(keywordName);          // pdfの名前
+        folder = DriveApp.getFolderById(folderId);               // pdfの保存先フォルダを指定
+        requestForm = folder.createFile(blob);                   // フォルダ内にpdfを作成
+        });
       }
 
-      const keywordUrl = requestForm.getUrl();               // キーワードフォームのURLを取得
-      console.log(keywordUrl);
+      const keywordUrl = requestForm.getUrl();                   // キーワードファイルのURLを取得
 
       // オブジェクトに追加
       this.keywordUrl = keywordUrl;
@@ -387,9 +469,7 @@ function Main() {
 
 
 
-
-
-    // ========== [ メソッド ] キーワードフォーム(スプレットシート)の内容をクリア ========== //
+    // ========== [ メソッド ] キーワードファイル(スプレットシート)の内容をクリア ========== //
 
     SSRemove() {
 
@@ -408,15 +488,18 @@ function Main() {
 
       console.log("FileTrash 実行!");
 
-      const delFolder = DriveApp.getFolderById(upfolder)            // 削除したいファイルのフォルダ
-      const delfiles = delFolder.getFiles();                        // 削除したいファイル
+      const delFolder = DriveApp.getFolderById(upfolder)             // 削除したいファイルのフォルダ
+      const delfiles = delFolder.getFiles();                         // 削除したいファイル
   
       // 指定したフォルダ内にアップロード関連のファイルがあれば削除
       while(delfiles.hasNext()) {
-        const file = delfiles.next();                               // ファイルを取得
-        const fileName = file.getName();                            // ファイル名を取得
-        const nameJudge = fileName.indexOf(this.upLoadName) !== -1; // ファイル名の有無判定
-        if ( nameJudge ) file.setTrashed(true);                     // ファイルを削除
+        const file = delfiles.next();                                // ファイルを取得
+        const fileName = file.getName();                             // ファイル名を取得
+        const nameJudge = this.upLoadNames.indexOf(fileName) !== -1; // ファイル名の有無判定
+        if ( nameJudge ) {
+          file.setTrashed(true);                                     // ファイルを削除
+          console.log(`${fileName}を削除しました！`);
+        }
       }
 
     };  // FileTrash()_END
@@ -446,24 +529,23 @@ function Main() {
       const resNum = arrTrans[1].indexOf(registPerson);     // 回答者名と一致した行番号(開始No:0)
 
       // ファイルURL
-      let setUrl;
-      if ( this.keywordUrl !== undefined ) setUrl = this.keywordUrl;
-      if ( this.fileUrl !== undefined ) setUrl = this.fileUrl;
-
-      // オブジェクトに追加
-      this.setUrl = setUrl;
+      let setKeywordUrl, setUrls;
+      if ( this.keywordUrl !== undefined ) setKeywordUrl = this.keywordUrl;
+      if ( this.fileUrls !== undefined ) setUrls = this.fileUrls;
 
       // 問い合わせ・要望フォームのURL
       const requestsUrl = "https://forms.gle/GkYxu4ENEmq2RzvX9";
 
-
-
       // メール送信用
-      let reply;                             // メール送信先
-      let title;                             // メールタイトル
-      let content;                           // メール本文
-      
-      // 登録者(C)にアップロード完了通知メールを送信
+      let reply;     // メール送信先
+      let title;     // メールタイトル
+      let content;   // メール本文
+
+      // アップロードファイル名とURLの文言
+      let setNameUrl = SetNamesUrls(this.fileRenames) 
+
+
+  // 登録者(C)にアップロード完了通知メールを送信
       if ( resNum !== -1 ) {    
         reply   = arrTrans[2][resNum];
         title   = '【iサーチ】ファイルのアップロード完了通知';
@@ -472,7 +554,10 @@ function Main() {
     \n\
     いつもお仕事お疲れ様です。\n\
     iサーチに貴重な資料の登録をありがとうございます。\n\
-    ${setUrl}\n\
+    キーワードファイル：\n\
+    ${setKeywordUrl}\n\n\
+    アップロードファイル：\n\
+    ${setNameUrl}\n\
     \n\
     おかげ様でISOWAビトが安心して業務を行う事ができます。\n\
     \n\
@@ -480,13 +565,14 @@ function Main() {
     よりご連絡下さい。\n\
     ${requestsUrl}'
     .replace('${registPerson}', registPerson)
-    .replace('${setUrl}', setUrl)
+    .replace('${setKeywordUrl}', setKeywordUrl)
+    .replace('${setNameUrl}', setNameUrl)
     .replace('${requestsUrl}', requestsUrl);
-      
+
         // メールを送信
         MailContents( reply, title, content );
 
-      // 登録者のアドレスが不明な場合、errAddressにメール送信
+  // 登録者のアドレスが不明な場合、errAddressにメール送信
       } else {     
         reply   = errAddress;
         title   = '【iサーチ】アップロードファイル登録者のアドレスが見つかりませんでした。';
@@ -496,13 +582,17 @@ function Main() {
     いつもお仕事お疲れ様です。\n\
     iサーチにファイルをアップロードした${registPerson}さんの\n\
     アドレスが見つかりませんでした。\n\
-    アップロードファイル：${this.fileUrl}\n\
+    キーワードファイル：\n\
+    ${setKeywordUrl}\n\n\
+    アップロードファイル：\n\
+    ${setNameUrl}\n\
     アドレスリスト：${addressUrl}\n\
     \n\
     登録者名とアドレスリスト(スプレットシート)を\n\
     確認お願いします。'
     .replace('${registPerson}', registPerson)
-    .replace('${setUrl}', setUrl)
+    .replace('${setNameUrl}', setNameUrl)
+    .replace('${setKeywordUrl}', setKeywordUrl)
     .replace('${addressUrl}', addressUrl);
                   
         // メールを送信
@@ -510,7 +600,7 @@ function Main() {
       };
       
       
-      // 問合せ・要望に回答があった場合、メールを送信
+  // 問合せ・要望に回答があった場合、メールを送信
       if ( requests !== "" ) {
         reply   = contactAddress;
         title   = '【iサーチ】フォームから問い合わせ・要望がありました。';
@@ -531,7 +621,34 @@ function Main() {
         MailContents( reply, title, content );
       }
       
-      
+      // [関数]アップロードファイル名・URLの文言
+      function SetNamesUrls(fileRenames) {
+
+        // 変数の定義・初期化
+        let nameAndUrl;
+        let i = 0;
+        
+        // ファイル名・URLを書込
+        setUrls.forEach( setUrl => {
+          const name = fileRenames[i]; 
+          const url = setUrl;
+
+          // 初回実行
+          if ( i === 0) {
+            nameAndUrl = `${name}\n\ 　${url}\n\
+  `
+          // 2回目以降
+          } else {
+            nameAndUrl += `  ${name}\n\ 　${url}\n\
+  `
+          }
+          i++;  // 次のファイルを取得
+        })
+
+        return nameAndUrl;  // setNameUrlへ返却
+      };  // SetNamesUrls()_END
+
+
       // [関数]メール送信
       function MailContents( reply, title, content ) {
         
@@ -558,15 +675,15 @@ function Main() {
   };      // Class Obj()_END
 
 
-  // === オブジェクトを作成(アップロードファイル・キーワードフォームを指定フォルダに作成) === //
+  // === オブジェクトを作成(アップロードファイル・キーワードファイルを指定フォルダに作成) === //
 
   const objArr = [];     // 配列を初期化
   const obj = new Obj(); // オブジェクト{obj}作成
-  obj.GetFileName();     // アップロードファイル・キーワードフォーム名を変更
+  obj.GetFileData();     // アップロードファイル・キーワードファイル名を変更
   obj.FileMove();        // 指定フォルダにアップロードファイルのコピーを追加
-  obj.WhiteForm();       // フォーム回答をキーワードフォーム(スプレットシート)に書込
-  obj.PdfCreate();       // キーワードフォーム(スプレットシート)をPDF変換して指定フォルダに追加
-  obj.SSRemove();        // キーワードフォーム(スプレットシート)の内容をクリア
+  obj.WhiteForm();       // フォーム回答をキーワードファイル(スプレットシート)に書込
+  obj.PdfCreate();       // キーワードファイル(スプレットシート)をPDF変換して指定フォルダに追加
+  obj.SSRemove();        // キーワードファイル(スプレットシート)の内容をクリア
   obj.FileTrash();       // アップロードした元ファイルをアップロードフォルダ内から削除
   obj.SendMail();        // フォーム回答者にファイル保存の完了通知を送信
 
@@ -578,13 +695,13 @@ function Main() {
 };   // Main()_END
 
 
-/* 予定  実行時間 約10秒 2021/01/19
+/* 
 ・ アップロードファイルのファイル名取得(拡張子無し)                   >>> 完了
-・ キーワードフォーム(スプレットシート)にキーワードを書込              >>> 完了  
+・ キーワードファイル(スプレットシート)にキーワードを書込              >>> 完了  
 ・  〃  をファイル名_キーワードにrename・pdf変換し、指定フォルダに保存 >>> 完了
 ・ アップロードファイルを指定のフォルダに移動                        >>> 完了
 ・ アップロードファイルのURLをスプレットシートに書込                  >>> 完了
-・ キーワードフォーム(スプレットシート)の内容をクリア                 >>> 完了
+・ キーワードファイル(スプレットシート)の内容をクリア                 >>> 完了
 ・ アップロードファイルを削除                                     >>> 完了
 ・ 配列[keyword], [getData]の内容確認                           >>> 完了
 ・ 取得した情報が変更した場合でもすぐに修正できる様にする。            >>> 完了
@@ -592,11 +709,15 @@ function Main() {
 ・ アップロードファイル名を変更(登録者名を削除)                      >>> 完了
 ・ メールを送信                                                 >>> 完了
 ・ エラーとなった場合にエラー内容をメールで通知。                     >>> 完了
-
+・ 登録者名にスペースがあった場合は、スペースを削除して格納する。        >>> 完了
+・ アップロードファイルを複数登録する場合に対応する。                  >>> 完了
+・ アップロードファイルがGOOGLEドライブのフォルダに保存されるまで
+　 タイムラグがある。～約40秒
+   >>> フォルダ内にファイルが無かった場合、5秒間待って再度ファイル
+   　　 の存在確認を行う処理を追加。
 
 メール通知ソフトについて
-・ 追加ファイル数の内容が総計になっている。
-・ 問い合わせ・要望のリンクを貼った方が親切。
+・ 問い合わせ・要望のリンクを貼った方が親切。  >>> 完了
 
 
 */

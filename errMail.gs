@@ -4,8 +4,8 @@ function ErrMail(msg) {
   console.log("ErrMail 実行!");
         
   // メールの送信情報
-  const to = "k.kamikura@isowa.co.jp";                 // 送信先
-  const subject = "正常にスクリプトが完了できませんでした。"; // タイトル
+  const to = "k.kamikura@isowa.co.jp";  // 送信先
+  const subject = "正常にスクリプトが完了できませんでした。";    // タイトル
         body = '\
     iサーチ運営チームのみなさま\n\
     \n\
