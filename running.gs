@@ -6,7 +6,7 @@ function Running() {
 
   // 30秒間のロックを取得
   try {
-    lock.waitLock(30000);       // ロックを実施
+    lock.waitLock(60000);       // ロックを実施
     console.log("Main 実行！");  // 実行確認用
     Main();                     // 関数を実行
   } catch(e) {
@@ -16,7 +16,7 @@ function Running() {
     const checkword = "ロックのタイムアウト: 別のプロセスがロックを保持している時間が長すぎました。"
     if ( e.message == checkword ) {
       // ロックエラーの場合
-      msg = "他の人が実行中です。";
+      msg = "他の人が実行中です。少し待ってからアップロードして下さい。";
       ErrMail(msg);
       console.log(msg);
     } else {
@@ -28,7 +28,7 @@ function Running() {
   } finally {
     // ロックを開放
     lock.releaseLock();
-    console.log("正常に実行されました！");
+    console.log("実行完了！");
   }
 
 };

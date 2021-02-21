@@ -1,17 +1,3 @@
-/*
-　・ 登録者名にスペースがあった場合は、スペースを削除して格納する。
-　　 スプレットの情報と完全一致した場合のみアドレスを取得する為。
-　　　>>> 完了
-
-　・ アップロードファイルを複数登録する場合に対応する。
-
-　・ アップロードされない時がある。正常にアップロードできなかった後に
-　　 何か影響があるのか要確認。→ scriptの実行する順番を確実に守るようにする。
-     >>> ファイル名が一致していない可能性が高い。
-
-*/
-
-// デバック時はここから直接実行
 function Main() {
 
   // スプレットシートを取得
@@ -179,14 +165,14 @@ function Main() {
 
     GetFileData() {
 
-      console.log("GetFileData 実行!");
+      console.log("【GetFileData 実行!】");
 
       // 変数の定義・初期化
       let id;                  // アップロードID
       let uploadFile;          // アップロードファイル
       let upLoadName;          // アップロードされたファイル名を取得(名前有)
       let upLoadNames = [];    // 配列 アップロードされたファイル名
-      let upLoadUrls  = [];    // 配列 アップロードされたファイルURL
+      let upLoadUrls = [];     // 配列 アップロードされたファイルURL
 
       console.log("uploadFileExists(アップロードファイルの存在判定):" + uploadFileExists);  // ログ確認用
 
@@ -196,8 +182,10 @@ function Main() {
 
         // アップロードファイルのURLを配列で取得
         if ( multiple ) {
+          console.log("アップロードファイルは複数です！");         // ログ確認用 
           upLoadUrls = uploadFileUrl.split(', ');            // 複数ファイルの場合
         } else {
+          console.log("アップロードファイルは１つです！");         // ログ確認用
           upLoadUrls = [ uploadFileUrl ];                    // 1ファイルのみの場合
         }
 
@@ -210,8 +198,7 @@ function Main() {
         })
       }
 
-      console.log("upLoadNames:" + upLoadNames);
-      console.log("upLoadUrls:" + upLoadUrls);
+      console.log("upLoadNames(アップロードファイル名):" + upLoadNames);   // ログ確認用
 
       // オブジェクトに追加
       this.upLoadUrls  = upLoadUrls;    // アップロードファイルURL(生データ)
@@ -225,7 +212,7 @@ function Main() {
 
     FileMove() {
 
-      console.log("FileMove 実行!");
+      console.log("【FileMove 実行!】");
     
       // 変数の定義・初期化
       let copyId;               // コピーファイルのID
@@ -238,7 +225,7 @@ function Main() {
       let fileUrls     = [];    // 配列 [コピーファイルURL]
       let fileRenames  = [];    // 名前が付けられる前の元々のファイル名の配列
       let keywordNames = [];    // 配列 [キーワードファイルのファイル名]
-
+    
       let folder = DriveApp.getFolderById(upfolder);         // コピー元ファイルのフォルダ
       let files  = folder.getFiles();                        // コピー元ファイル;
     
@@ -247,30 +234,19 @@ function Main() {
         if ( fileContents === el.contents ) copyId = el.id;
       })
 
-
+      // アップロードファイル登録あり、指定フォルダ内にファイルが存在しない場合
       for ( let i = 0; i < 50; i++ ) {
-        if ( !files.hasNext() ) {
+        if ( uploadFileExists && !files.hasNext() ) {
           console.log("フォルダ内にファイルが存在しませんでした！");
-          SleepTimer();
+          SleepTimer(upfolder);
         }
-      }
-
-
-      // 指定フォルダ内にファイルが存在しない場合は、5秒間スリープ   *** 対策ソフト_20210219 ***
-      function SleepTimer() {
-        let now = Utilities.formatDate(new Date(), "Asia/Tokyo", "HH:mm:ss");   // 現在の時間
-        console.log("now(現在時間):" + now);
-
-        folder = DriveApp.getFolderById(upfolder);                // コピー元ファイルのフォルダ
-        files  = folder.getFiles();                               // コピー元ファイル
-        let staySecond = 5;                                     // 遅延時間の設定(秒)
-        Utilities.sleep(staySecond * 1000);                     // 遅延実行
       };
 
       // アップロード関連のファイルが存在した場合、コピーして指定フォルダに保存(URLを取得)
       while(files.hasNext()) {
-        let file  = files.next();                             // ファイルを取得
-        fileName  = file.getName();                           // ファイル名を取得
+        console.log();
+        let file = files.next();                              // ファイルを取得
+        fileName = file.getName();                            // ファイル名を取得
         fileName0 = fileName.split(' - ')[0];                 // アップロードファイル名(名前無 ・ 拡張子無)
         fileName1 = fileName.split(' - ')[1];                 // アップロードファイルの登録者名以降の文字列を抽出
 
@@ -309,16 +285,22 @@ function Main() {
           fileRenames.push(fileRename);                                        // ファイル名(コピーデータ)を配列に追加
           fileUrls.push(fileUrl);                                              // ファイルURL(コピーデータ)を配列に追加
           keywordNames.push(keywordName);                                      // キーワードファイル名を配列に追加
+        } else {
+          console.log("ファイル名が一致しませんでした！");
         }
       }
 
-      // console.log("fileUrls:" + fileUrls);
+    // ログ確認用
+    console.log("fileNames(元ファイル名の配列):" + fileNames);
+    console.log("fileRenames(コピーファイル名の配列):" + fileRenames);
+    console.log("fileUrls(コピーファイルURLの配列):" + fileUrls);
+    console.log("keywordNames(キーワードファイル名の配列):" + keywordNames);
 
-     // オブジェクトに追加　
-     this.fileNames   = fileNames;        // ファイル名(元データ)
-     this.fileRenames = fileRenames;      // ファイル名(コピーデータ)
-     this.fileUrls    = fileUrls;         // ファイルURL(コピーデータ)
-     this.keywordNames = keywordNames;    // キーワードファイル名
+    // オブジェクトに追加　
+    this.fileNames   = fileNames;        // ファイル名(元データ)
+    this.fileRenames = fileRenames;      // ファイル名(コピーデータ)
+    this.fileUrls    = fileUrls;         // ファイルURL(コピーデータ)
+    this.keywordNames = keywordNames;    // キーワードファイル名
 
     };    // FileMove()_END
 
@@ -330,7 +312,7 @@ function Main() {
      
     WhiteForm() {
 
-      console.log("WhiteForm 実行!");
+      console.log("【WhiteForm 実行!】");
   
       // 変数の定義・初期化
       const datas       = getDatas;      // フォームの取得データ配列getDatasを格納
@@ -342,6 +324,11 @@ function Main() {
       datas.concat(notDatas).forEach( data => {
         if ( datas.includes(data) && !notDatas.includes(data)) setDatas.push(data);
       });
+
+      // ログ確認用
+      console.log("datas(取得データ)：" + datas);
+      console.log("setSubDatas(書込補助データ)：" + setSubDatas);
+      console.log("setDatas(書込データ)：" + setDatas);
 
       // キーワード説明文を書込 (スプレットシートのA列)
       let num = 1; // 書込み行(初期設定)
@@ -376,7 +363,11 @@ function Main() {
           num++;
           i++;
         })
+        console.log("アップロードファイル名とURLを書込みました！");
+      } else {
+        console.log("アップロードファイルが見つかりませんでした！");
       }
+
 
       // 問い合わせ・要望の項目に回答があったら、問い合わせ・要望のスプレットシートに内容を書込
       if ( requests !== "" ) {
@@ -409,7 +400,7 @@ function Main() {
      
     PdfCreate() {
 
-      console.log("PdfCreate 実行!");
+      console.log("【PdfCreate 実行!】");
   
       // キーワードフォーム(スプレットシート)をpdf変換
       SpreadsheetApp.flush();
@@ -422,48 +413,50 @@ function Main() {
         }
       });
   
-      // 変数の定義
-      let fileName;    // キーワードフォームのファイル名
-      let folderId;    // アップロードファイルの保存先フォルダのID
-      let blob;        // PDF
-      let folder;      // PDFの保存先フォルダ
-      let requestForm; // フォルダに保存したPDF
-      let folderIdKey = '14YTMjpzTq77UDN-bPT_zAGELWJudJuli';  // キーワードフォームの保存先フォルダID
+      // 変数の初期化・定義
+      let fileName;                                           // キーワードファイルのファイル名
+      let folderId;                                           // アップロードファイルの保存先フォルダのID
+      let folderIdKey = '14YTMjpzTq77UDN-bPT_zAGELWJudJuli';  // キーワードファイルの保存先フォルダID
+      let keywordUrls = [];                                   // キーワードファイルURLの配列
   
       /* ファイル内容が豆知識・プチ情報(アップロードファイルなし)の場合 //
       // 回答フォームからファイルのタイトルを作成・内容を書込。        //
       // 豆知識・プチ情報のフォルダに保存                          */
       if ( notUploadFile === 'なし' ) {
-        fileName = `${littleInfoTitle}.pdf`; // ファイル名を指定
+        fileName = [`${littleInfoTitle}.pdf`]; // ファイル名を指定
+
+        // ログ確認用
+        console.log("豆知識・プチ情報のアップロードファイルはありません！");
+        console.log(`ファイル名は、${littleInfoTitle}.pdf`);
     
-        // 保存先フォルダと回答フォームの内容が一致した内容のフォルダIDを [folderId] に格納
+        // 保存先フォルダと回答フォームの一致したフォルダIDを [folderId] に格納
         contentsIds.forEach( el => {
-          if ( fileContents === el.contents ) folderId = el.id;
+          if ( fileContents === el.contents ) {
+            folderId = el.id;
+            console.log(`ファイルの保存先のフォルダ名は、${el.contents}です！`);
+          }
         });
           
-        // pdfを指定フォルダに作成
-        blob = response.getBlob().setName(fileName); // pdfの名前
-        folder = DriveApp.getFolderById(folderId);   // pdfの保存先フォルダを指定
-        requestForm = folder.createFile(blob);       // フォルダ内にpdfを作成
-
-      // ファイル内容が豆知識・プチ情報以外の場合
+      // キーワードファイルを指定フォルダに作成
       } else {
-
-        // キーワードファイルを指定フォルダに作成
-        folderId = folderIdKey;                                  // ファイルの保存先フォルダID
-        
-        // キーワードファイルを作成
-        this.keywordNames.forEach( keywordName => {
-        blob = response.getBlob().setName(keywordName);          // pdfの名前
-        folder = DriveApp.getFolderById(folderId);               // pdfの保存先フォルダを指定
-        requestForm = folder.createFile(blob);                   // フォルダ内にpdfを作成
-        });
+        folderId = folderIdKey;   // 指定フォルダのIDを取得
+        fileName = this.keywordNames;
       }
 
-      const keywordUrl = requestForm.getUrl();                   // キーワードファイルのURLを取得
+      // キーワードファイルを作成
+      fileName.forEach( el => {
+        const blob = response.getBlob().setName(el);          // pdfの名前
+        const folder = DriveApp.getFolderById(folderId);      // pdfの保存先フォルダを指定
+        const requestForm = folder.createFile(blob);          // フォルダ内にpdfを作成
+        const keywordUrl = requestForm.getUrl();              // キーワードファイルURLを取得
+        console.log(`キーワードフォルダ内に${el}を追加しました！`); // ログ確認用
+        keywordUrls.push(keywordUrl);                         // 配列に追加
+      });
+
+      console.log("keywordUrls(キーワードファイルURLの配列):" + keywordUrls);  // ログ確認用
 
       // オブジェクトに追加
-      this.keywordUrl = keywordUrl;
+      this.keywordUrls = keywordUrls;
 
     };  // PdfCreate()_END
 
@@ -473,7 +466,7 @@ function Main() {
 
     SSRemove() {
 
-      console.log("SSRemove 実行!");
+      console.log("【SSRemove 実行!】");
   
       const keyFormLastRow = keyForm.getLastRow();               // スプレットシート（キーワード書込先）の最終行目を取得
       keyForm.getRange(1, 1, keyFormLastRow, 2).clearContent();  // 指定したセルのコンテンツを削除
@@ -486,19 +479,27 @@ function Main() {
 
     FileTrash() {
 
-      console.log("FileTrash 実行!");
+      console.log("【FileTrash 実行!】");
 
-      const delFolder = DriveApp.getFolderById(upfolder)             // 削除したいファイルのフォルダ
-      const delfiles = delFolder.getFiles();                         // 削除したいファイル
+      const delFolder = DriveApp.getFolderById(upfolder)                // 削除したいファイルのフォルダ
+      const delfiles = delFolder.getFiles();                            // 削除したいファイル
   
       // 指定したフォルダ内にアップロード関連のファイルがあれば削除
       while(delfiles.hasNext()) {
-        const file = delfiles.next();                                // ファイルを取得
-        const fileName = file.getName();                             // ファイル名を取得
-        const nameJudge = this.upLoadNames.indexOf(fileName) !== -1; // ファイル名の有無判定
+        const file = delfiles.next();                                   // ファイルを取得
+        const fileName = file.getName();                                // ファイル名を取得
+        const nameJudge = this.upLoadNames.indexOf(fileName) !== -1;    // ファイル名の有無判定
+
+        // ログ確認用
+        console.log("フォルダ内にファイルを確認。1つ取り出します！");
+        console.log(`取り出したファイルは、${fileName}です！`)
+
+        // ファイル名が一致したら削除        
         if ( nameJudge ) {
-          file.setTrashed(true);                                     // ファイルを削除
-          console.log(`${fileName}を削除しました！`);
+          file.setTrashed(true);
+          console.log(`ファイル名が一致したため、${fileName}を削除しました！`); // ログ確認用
+        } else {
+          console.log("アップロードファイルとファイル名が一致しませんでした！");  // ログ確認用
         }
       }
 
@@ -509,7 +510,7 @@ function Main() {
 
     SendMail() {
       
-      console.log("SendMail 実行!");
+      console.log("【SendMail 実行!】");
       
       // アドレスが見つからない場合の送信先
       const errAddress = 'k.kamikura@isowa.co.jp';
@@ -546,7 +547,9 @@ function Main() {
 
 
   // 登録者(C)にアップロード完了通知メールを送信
-      if ( resNum !== -1 ) {    
+      if ( resNum !== -1 ) {
+        console.log("登録者にアップロード完了通知を送信！");
+
         reply   = arrTrans[2][resNum];
         title   = '【iサーチ】ファイルのアップロード完了通知';
         content = '\
@@ -573,7 +576,9 @@ function Main() {
         MailContents( reply, title, content );
 
   // 登録者のアドレスが不明な場合、errAddressにメール送信
-      } else {     
+      } else {
+        console.log("登録者が見つかりませんでした。報告メールを送信！");
+
         reply   = errAddress;
         title   = '【iサーチ】アップロードファイル登録者のアドレスが見つかりませんでした。';
         content = '\
@@ -601,7 +606,9 @@ function Main() {
       
       
   // 問合せ・要望に回答があった場合、メールを送信
-      if ( requests !== "" ) {
+      if ( requests !== "" ) {　
+        console.log("問合せ・要望があったので通知メールを送信！");
+
         reply   = contactAddress;
         title   = '【iサーチ】フォームから問い合わせ・要望がありました。';
         content = '\
@@ -695,6 +702,18 @@ function Main() {
 };   // Main()_END
 
 
+// 指定フォルダ内にファイルが存在しない場合は、5秒間スリープ   *** 対策ソフト_20210219 ***
+function SleepTimer(upLoadFolId) {
+  let now = Utilities.formatDate(new Date(), "Asia/Tokyo", "HH:mm:ss");   // 現在の時間
+  console.log("now(現在時間):" + now);                                     // 現在時間の表示
+  folder = DriveApp.getFolderById(upLoadFolId);                           // コピー元ファイルのフォルダ
+  files  = folder.getFiles();                                             // コピー元ファイル
+  let staySecond = 5;                                                     // 遅延時間の設定(秒)
+  Utilities.sleep(staySecond * 1000);                                     // 遅延実行
+};
+
+
+
 /* 
 ・ アップロードファイルのファイル名取得(拡張子無し)                   >>> 完了
 ・ キーワードファイル(スプレットシート)にキーワードを書込              >>> 完了  
@@ -714,10 +733,38 @@ function Main() {
 ・ アップロードファイルがGOOGLEドライブのフォルダに保存されるまで
 　 タイムラグがある。～約40秒
    >>> フォルダ内にファイルが無かった場合、5秒間待って再度ファイル
-   　　 の存在確認を行う処理を追加。
+   　　 の存在確認を行う処理を追加。                                     >>> 完了 ※1
+・ 上記の存在確認の処理を行う条件にアップロードファイル登録があった場合を追加。  >>> 完了
+・ 全てのスクリプト実行後に何を行い何が行われなかったのかわかるように          >>> 完了
+　 ログに残す様にする。
+
 
 メール通知ソフトについて
 ・ 問い合わせ・要望のリンクを貼った方が親切。  >>> 完了
 
+
+※1 5秒間遅延させるループ処理を抜けてしまう条件
+
+　　① 前回のアップロード処理(スクリプトの実行)が完了していなく、
+　　　 フォルダ内に前回のファイルが残っていた場合。
+
+　　   Googleフォームから送信した時点でアップロードファイルは
+　　　 フォルダに保存されてしまうため、前回のファイルを残さない
+　　　 様にする回避方法はない。
+
+
+　　② 複数のファイルをアップロードした場合。全て同時に保存される
+　　　 わけでは無いと1つ目のファイルが保存された時点でアンプロード
+　　　 処理(スクリプトの実行)は開始してしまう。
+
+　　　 全てのファイルが保存される時間を稼ぐために、ファイル1つの
+　　　 処理時間を伸ばす。(その間に2つ目以降のファイルが保存される
+　　　 のを待つ)
+
+
+　　③ 前回のアップロード処理(スクリプトの実行)が完了した後、何ら
+　　　 かの要因でフォルダ内にファイルが残ってしまった場合。
+
+　　　 スクリプト(FileTrash)で何らかの対策を行う。
 
 */
